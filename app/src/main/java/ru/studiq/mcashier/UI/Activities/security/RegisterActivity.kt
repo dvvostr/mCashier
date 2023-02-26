@@ -1,0 +1,151 @@
+package ru.studiq.mcashier.UI.Activities.security
+
+import android.app.Activity
+import android.app.AlertDialog
+import android.content.Context
+import android.content.Intent
+import android.os.Build
+import android.os.Bundle
+import android.util.Log
+import android.view.View
+import android.widget.EditText
+import android.widget.ImageButton
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.annotation.LongDef
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatButton
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import ru.studiq.mcashier.R
+import ru.studiq.mcashier.UI.Activities.Logon
+import ru.studiq.mcashier.UI.Activities.MainActivity
+import ru.studiq.mcashier.UI.Activities.tools.SetupActivity
+import ru.studiq.mcashier.common.Common
+import ru.studiq.mcashier.interfaces.ICustomListActivityListener
+import ru.studiq.mcashier.interfaces.IProviderClientListener
+import ru.studiq.mcashier.model.Settings
+import ru.studiq.mcashier.model.SettingsCommonKeysData
+import ru.studiq.mcashier.model.UserItem
+import ru.studiq.mcashier.model.classes.App
+import ru.studiq.mcashier.model.classes.network.*
+import ru.studiq.mcashier.model.classes.network.providerclasses.ProviderDataUser
+import java.io.Serializable
+import java.util.*
+
+
+class RegisterActivity : AppCompatActivity() {
+    companion object {
+        public const val USERLIST_ACTIVITY_REQUEST_CODE = 1
+    }
+    private lateinit var imageUser: ImageView
+    private lateinit var edUserName: TextView
+    private lateinit var btnBrowse: ImageButton
+    private lateinit var btnEnter: AppCompatButton
+    private lateinit var edPassword: EditText
+    private lateinit var btnSettings: AppCompatButton
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_register)
+        imageUser = findViewById(R.id.register_imageuser)
+        edUserName = findViewById(R.id.register_text_username)
+        btnBrowse = findViewById(R.id.register_button_browse)
+        btnEnter = findViewById(R.id.register_button_enter)
+        edPassword = findViewById(R.id.register_text_password)
+        btnSettings = findViewById(R.id.register_button_settings)
+
+        Settings.Application.currentUser = SettingsCommonKeysData(
+            Settings.Storage.ReadIntKeyValue(this.applicationContext, Settings.Storage.LastUserIndex) ?: -1,
+            Settings.Storage.ReadStringKeyValue(this.applicationContext, Settings.Storage.LastUserName) ?: ""
+        )
+        edUserName.text = Settings.Application.currentUser?.value ?: ""
+
+        btnEnter.setOnClickListener { handleEnterClick() }
+        btnBrowse.setOnClickListener { handleBrowseClick() }
+        btnSettings.setOnClickListener { handleSettingsClick() }
+    }
+    private fun handleEnterClick() {
+        MainActivity.Companion.Logon(this, object : ICustomListActivityListener {
+            override fun onSuccess(sender: Context?, code: Int, msg: String, data: Serializable?) {
+                super.onSuccess(sender, code, msg, data)
+                val intent = Intent(sender, MainActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
+            }
+            override fun onError(sender: Context?, code: Int, msg: String, data: Serializable?) {
+                super.onError(sender, code, msg, data)
+                (sender as? RegisterActivity)?.let {
+                    runOnUiThread {
+                        Common.AlertDialog.show(it, getString(R.string.cap_error), msg, true)
+                    }
+                }
+            }
+        })
+    }
+    private fun handleBrowseClick() {
+        runOnUiThread {
+            Common.WaitDialog.show(this, false)
+        }
+        UserListActivity.Companion.load(this, object : ICustomListActivityListener {
+            override fun onSuccess(sender: Context?, code: Int, msg: String, data: Serializable?) {
+                try {
+                    super.onSuccess(sender, code, msg, data)
+                    val intent = Intent(sender, UserListActivity::class.java).apply {
+                        putExtra(Settings.Activities.ParentActivity, RegisterActivity::class.java.name)
+                        putExtra(Settings.Activities.ActivityCaption, getString(R.string.cap_users))
+                        putExtra(Settings.Activities.ListItems, (data as? ProviderDataBody))
+                    }
+                    startActivityForResult(intent, USERLIST_ACTIVITY_REQUEST_CODE)
+                } finally {
+                    Common.WaitDialog.dismiss()
+                }
+            }
+
+            override fun onError(sender: Context?, code: Int, msg: String, data: Serializable?) {
+                Common.WaitDialog.dismiss()
+                (sender as? RegisterActivity)?.let {
+                    runOnUiThread {
+                        Common.AlertDialog.show(it, getString(R.string.cap_error), msg, true)
+                    }
+                }
+                super.onError(sender, code, msg, data)
+            }
+        })
+    }
+    private fun handleSettingsClick() {
+        val intent = Intent(this, SetupActivity::class.java)
+        intent.putExtra(Settings.Activities.ParentActivity, RegisterActivity::class.java.name)
+        intent.putExtra(Settings.Activities.ActivityCaption, getString(R.string.cap_settings))
+        startActivity(intent)
+    }
+
+    private fun openUserList(values: ProviderDataBody) {
+        val intent = Intent(this, UserListActivity::class.java)
+        intent.putExtra(Settings.Activities.ParentActivity, RegisterActivity::class.java.name)
+        intent.putExtra(Settings.Activities.ListItems, values)
+        startActivityForResult(intent, USERLIST_ACTIVITY_REQUEST_CODE)
+    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        Log.d("RESULT", "Code ${requestCode}")
+        if (resultCode == RESULT_OK && data != null) {
+            val item: ProviderDataUser? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                data.getSerializableExtra(Settings.Extra.UserObject, ProviderDataUser::class.java) as? ProviderDataUser
+            } else {
+                data.getSerializableExtra(Settings.Extra.UserObject) as? ProviderDataUser
+            }
+            Settings.Application.currentUser = item.let {
+                SettingsCommonKeysData(it?.id ?: -1, it?.userName ?: "")
+            }
+            edUserName.text = Settings.Application.currentUser?.value ?: ""
+
+        } else {
+            // не удалось получить результат
+        }
+        super.onActivityResult(requestCode, resultCode, data)
+    }
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        Log.d("RESULT", "Code ${requestCode}")
+    }
+}

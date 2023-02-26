@@ -1,0 +1,55 @@
+<resources>
+    <integer name="font_100">100</integer>
+    <integer name="font_200">200</integer>
+    <integer name="font_300">300</integer>
+    <integer name="font_400">400</integer>
+    <integer name="font_500">500</integer>
+    <integer name="font_600">600</integer>
+    <integer name="font_700">700</integer>
+    <integer name="font_800">800</integer>
+    <integer name="font_900">900</integer>
+    <string name="app_name">Mobile Cashier</string>
+    <string name="cap_empty"></string>
+    <string name="cap_settings">Settings</string>
+    <string name="cap_users">Users</string>
+    <string name="cap_selectuser">Select user</string>
+    <string name="cap_username">User name</string>
+    <string name="cap_departmentname">Department</string>
+
+    <string name="cap_loading">Loading...</string>
+    <string name="cap_notselected">Not selected</string>
+    <string name="cap_enter">Enter</string>
+    <string name="cap_register">Register</string>
+    <string name="cap_enterpassword">Enter password</string>
+
+    <string name="cap_error">Error</string>
+
+    <string name="error_unassigned">Unassigned error</string>
+
+    <string name="settings_not_selected">Not selected</string>
+    <string name="settings_common">Основное</string>
+    <string name="settings_category_network">Network</string>
+
+    <string name="settings_URL">Connection pofile</string>
+    <string name="settings_connect_timeout">Connect timeout (s)</string>
+    <string name="settings_network_read_timeout">Read timeout (s)</string>
+    <string name="settings_network_write_timeout">Write timeout (s)</string>
+
+
+    <string name="settings_connection_desc">Service address URL</string>
+    <string name="settings_devicetype">Device type</string>
+
+    <string name="settings_check_value">Check value</string>
+    <string name="settings_digital_value">Digital value</string>
+    <string name="settings_HEX_value">HEX value</string>
+    <string name="settings_custom_value">Custom value [0-7] default: 3</string>
+
+    <string name="settings_category_02">Category 02</string>
+    <string name="settings_category_03">Category 03</string>
+
+    <string name="settings_Keys">Keys</string>
+    <string name="settings_Key1">Key 1</string>
+    <string name="settings_Key2">Key 2</string>
+    <string name="settings_Key3">Key 3</string>
+
+</resources>

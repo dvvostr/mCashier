@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="setting_common_devicetype" translatable="false">setting_common_devicetype</string>
+    <string name="setting_id_connection" translatable="false">settings_network_connection</string>
+    <string name="setting_net_connect_timeout" translatable="false">settings_network_connecttimeout</string>
+    <string name="setting_net_read_timeout" translatable="false">settings_network_readtimeout</string>
+    <string name="setting_net_write_timeout" translatable="false">settings_network_writetimeout</string>
+
+</resources>

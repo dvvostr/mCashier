@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="connection_list_captions">
+        <item>WORK</item>
+        <item>TEST</item>
+    </string-array>
+    <string-array name="connection_list_values">
+        <item>https://axweb-test.mhpost.ru:8408/service/execute/cash1</item>
+        <item>https://axweb-test.mhpost.ru:8408/service/execute/cash2</item>
+    </string-array>
+    <string-array name="device_type_list_caption">
+        <item>Device type 1</item>
+        <item>Device type 2</item>
+        <item>Device type 3</item>
+        <item>Device type 4</item>
+        <item>Device type 5</item>
+    </string-array>
+    <string-array name="device_type_list_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+</resources>
