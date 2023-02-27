@@ -8,6 +8,7 @@ import ru.studiq.mcashier.R
 import ru.studiq.mcashier.UI.Classes.CustomAlertDialog
 import ru.studiq.mcashier.model.SettingData
 import ru.studiq.mcashier.UI.Classes.CustomWaitDialog
+import ru.studiq.mcashier.model.classes.items.MainCardItem
 
 typealias JSONText = String
 
@@ -38,7 +39,35 @@ object Common {
         }
         return jsonString
     }
-
+    fun getMainMenuItems(context: Context): List<MainCardItem> {
+        val items: List<MainCardItem>  = listOf(
+            MainCardItem(
+                R.drawable.icon_posterminal,
+                context.getString(R.string.cap_sales)
+            ),
+            MainCardItem(
+                R.drawable.icon_salesreturn,
+                context.getString(R.string.cap_salesreturns)
+            ),
+            MainCardItem(
+                R.drawable.icon_underconstruction,
+                context.getString(R.string.cap_underconstruction)
+            ),
+            MainCardItem(
+                R.drawable.icon_underconstruction,
+                context.getString(R.string.cap_underconstruction)
+            ),
+            MainCardItem(
+                R.drawable.icon_underconstruction,
+                context.getString(R.string.cap_underconstruction)
+            ),
+            MainCardItem(
+                R.drawable.icon_reports,
+                context.getString(R.string.cap_reports)
+            )
+        )
+        return items
+    }
     object AlertDialog {
         private var dialog: CustomAlertDialog? = null
 

@@ -93,9 +93,10 @@ class UserListActivity : CustomListActivity() {
         }
         adapter.setOnItemClickListener { item, view ->
             val userItem = item as UserListItem
-            Settings.Storage.WriteStringKeyValue(this.applicationContext, Settings.Storage.LastUserName, userItem.user.userName)
+//            Settings.Storage.WriteStringKeyValue(this.applicationContext, Settings.Storage.LastUserName, userItem.user.userName)
             val intent = Intent()
             val user = userItem.user
+            Settings.Application.currentUser = user
             intent.putExtra(Settings.Extra.UserObject, user)
             setResult(RESULT_OK, intent)
             finish()

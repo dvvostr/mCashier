@@ -9,7 +9,6 @@ import android.preference.*
 import android.text.TextUtils
 import android.view.Menu
 import android.view.MenuItem
-import androidx.preference.PreferenceFragmentCompat
 import ru.studiq.mcashier.R
 import ru.studiq.mcashier.model.classes.activities.common.CustomCompatActivity
 import ru.studiq.mcashier.common.Common

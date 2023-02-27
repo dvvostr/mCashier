@@ -4,6 +4,7 @@ package ru.studiq.mcashier.model.classes
 import android.app.Application
 import android.content.Context
 import android.content.res.Resources
+import ru.studiq.mcashier.model.Settings
 
 class App : Application() {
     override fun onCreate() {
@@ -11,6 +12,7 @@ class App : Application() {
         appContext = this.applicationContext
         instance = this
         res = resources
+        Settings.initialize()
     }
 
     companion object {

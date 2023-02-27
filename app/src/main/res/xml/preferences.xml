@@ -7,54 +7,57 @@
         android:title="@string/settings_common">
         <ListPreference
             android:defaultValue="-1"
-            android:dialogTitle="@string/settings_devicetype"
+            android:dialogTitle="@string/settings_cap_devicetype"
             android:entries="@array/device_type_list_caption"
             android:entryValues="@array/device_type_list_values"
             android:key="@string/setting_common_devicetype"
             android:summary="@string/settings_not_selected"
-            android:title="@string/settings_devicetype" />
+            android:title="@string/settings_cap_devicetype" />
         <SwitchPreference
             android:key="settings_checkvalue_01"
             android:defaultValue="true"
-            android:title="@string/settings_check_value" />
+            android:title="@string/settings_cap_check_value" />
         <SwitchPreference
             android:key="settings_checkvalue_02"
             android:defaultValue="false"
-            android:title="@string/settings_check_value" />
+            android:title="@string/settings_cap_check_value" />
     </PreferenceCategory>
     <PreferenceCategory
         android:key="settings_category_network"
         android:textStyle="bold"
         android:title="@string/settings_category_network">
         <ListPreference
-            android:dialogTitle="@string/settings_URL"
+            android:dialogTitle="@string/settings_cap_URL"
             android:entries="@array/connection_list_captions"
             android:entryValues="@array/connection_list_values"
             android:key="@string/setting_id_connection"
-            android:summary="@string/settings_connection_desc"
-            android:title="@string/settings_URL" />
+            android:summary="@string/settings_cap_connection_desc"
+            android:title="@string/settings_cap_URL" />
         <EditTextPreference
             android:defaultValue="10"
-            android:key="setting_net_connect_timeout"
+            android:key="@string/setting_net_connect_timeout"
             android:selectAllOnFocus="true"
             android:singleLine="true"
             android:inputType="number"
             app:defaultValue="22"
-            android:title="@string/settings_connect_timeout" />
+            app:useSimpleSummaryProvider="true"
+            android:title="@string/settings_cap_connect_timeout" />
         <EditTextPreference
             android:defaultValue="12"
-            android:key="setting_net_read_timeout"
+            android:key="@string/setting_net_read_timeout"
             android:selectAllOnFocus="true"
             android:singleLine="true"
             android:inputType="number"
-            android:title="@string/settings_network_read_timeout" />
+            app:useSimpleSummaryProvider="true"
+            android:title="@string/settings_cap_network_read_timeout" />
         <EditTextPreference
             android:defaultValue="20"
             android:key="@string/setting_net_write_timeout"
             android:selectAllOnFocus="true"
             android:singleLine="true"
             android:inputType="number"
-            android:title="@string/settings_network_read_timeout" />
+            app:useSimpleSummaryProvider="true"
+            android:title="@string/settings_cap_network_read_timeout" />
         <EditTextPreference
             android:defaultValue="10"
             android:key="settings_rfid_power"
@@ -69,7 +72,7 @@
     <PreferenceCategory
         android:key="settings_category_02"
         android:textStyle="bold"
-        android:title="@string/settings_category_02">
+        android:title="@string/settings_cap_category_02">
     <EditTextPreference
         android:defaultValue="3"
         android:key="settings_custom_value_01"
@@ -77,19 +80,19 @@
         android:singleLine="true"
         android:inputType="number"
         android:digits="01234567"
-        android:title="@string/settings_custom_value"/>
+        android:title="@string/settings_cap_custom_value"/>
     </PreferenceCategory>
     <PreferenceCategory
         android:key="settings_category_03"
         android:textStyle="bold"
-        android:title="@string/settings_category_03">
+        android:title="@string/settings_cap_category_03">
         <EditTextPreference
             android:defaultValue="@string/cap_empty"
             android:key="settings_key1"
             android:selectAllOnFocus="true"
             android:singleLine="true"
             android:inputType="text"
-            android:title="@string/settings_Key1"
+            android:title="@string/settings_cap_Key1"
             android:summary="@string/cap_empty" />
         <EditTextPreference
             android:defaultValue="@string/cap_empty"
@@ -97,7 +100,7 @@
             android:selectAllOnFocus="true"
             android:singleLine="true"
             android:inputType="text"
-            android:title="@string/settings_Key2"
+            android:title="@string/settings_cap_Key2"
             android:summary="@string/cap_empty"/>
         <EditTextPreference
             android:defaultValue="@string/cap_empty"
@@ -105,7 +108,7 @@
             android:selectAllOnFocus="true"
             android:singleLine="true"
             android:inputType="text"
-            android:title="@string/settings_Key3"
+            android:title="@string/settings_cap_Key3"
             android:summary="@string/cap_empty"/>
     </PreferenceCategory>
 

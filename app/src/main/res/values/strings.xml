@@ -11,10 +11,17 @@
     <string name="app_name">Mobile Cashier</string>
     <string name="cap_empty"></string>
     <string name="cap_settings">Settings</string>
+    <string name="cap_tools">Tools</string>
+    <string name="cap_logout">Logout</string>
     <string name="cap_users">Users</string>
     <string name="cap_selectuser">Select user</string>
     <string name="cap_username">User name</string>
     <string name="cap_departmentname">Department</string>
+    <string name="cap_sales">Sales</string>
+    <string name="cap_underconstruction">Under/nconstruction</string>
+    <string name="cap_salesreturns">Sales/nreturns</string>
+    <string name="cap_reports">Reports</string>
+
 
     <string name="cap_loading">Loading...</string>
     <string name="cap_notselected">Not selected</string>
@@ -25,31 +32,34 @@
     <string name="cap_error">Error</string>
 
     <string name="error_unassigned">Unassigned error</string>
+    <string name="error_department_not_set">Unknown department</string>
 
     <string name="settings_not_selected">Not selected</string>
     <string name="settings_common">Основное</string>
     <string name="settings_category_network">Network</string>
 
-    <string name="settings_URL">Connection pofile</string>
-    <string name="settings_connect_timeout">Connect timeout (s)</string>
-    <string name="settings_network_read_timeout">Read timeout (s)</string>
-    <string name="settings_network_write_timeout">Write timeout (s)</string>
+    <string name="settings_cap_URL">Connection pofile</string>
+    <string name="settings_cap_connect_timeout">Connect timeout (s)</string>
+    <string name="settings_cap_network_read_timeout">Read timeout (s)</string>
+    <string name="settings_cap_network_write_timeout">Write timeout (s)</string>
 
 
-    <string name="settings_connection_desc">Service address URL</string>
-    <string name="settings_devicetype">Device type</string>
+    <string name="settings_cap_connection_desc">Service address URL</string>
+    <string name="settings_cap_devicetype">Device type</string>
 
-    <string name="settings_check_value">Check value</string>
-    <string name="settings_digital_value">Digital value</string>
-    <string name="settings_HEX_value">HEX value</string>
-    <string name="settings_custom_value">Custom value [0-7] default: 3</string>
+    <string name="settings_cap_check_value">Check value</string>
+    <string name="settings_cap_digital_value">Digital value</string>
+    <string name="settings_cap_HEX_value">HEX value</string>
+    <string name="settings_cap_custom_value">Custom value [0-7] default: 3</string>
 
-    <string name="settings_category_02">Category 02</string>
-    <string name="settings_category_03">Category 03</string>
+    <string name="settings_cap_category_02">Category 02</string>
+    <string name="settings_cap_category_03">Category 03</string>
 
-    <string name="settings_Keys">Keys</string>
-    <string name="settings_Key1">Key 1</string>
-    <string name="settings_Key2">Key 2</string>
-    <string name="settings_Key3">Key 3</string>
+    <string name="settings_cap_Keys">Keys</string>
+    <string name="settings_cap_Key1">Key 1</string>
+    <string name="settings_cap_Key2">Key 2</string>
+    <string name="settings_cap_Key3">Key 3</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

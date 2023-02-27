@@ -1,38 +1,26 @@
 package ru.studiq.mcashier.UI.Activities.security
 
-import android.app.Activity
-import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.annotation.LongDef
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import ru.studiq.mcashier.R
 import ru.studiq.mcashier.UI.Activities.Logon
 import ru.studiq.mcashier.UI.Activities.MainActivity
 import ru.studiq.mcashier.UI.Activities.tools.SetupActivity
 import ru.studiq.mcashier.common.Common
 import ru.studiq.mcashier.interfaces.ICustomListActivityListener
-import ru.studiq.mcashier.interfaces.IProviderClientListener
 import ru.studiq.mcashier.model.Settings
-import ru.studiq.mcashier.model.SettingsCommonKeysData
-import ru.studiq.mcashier.model.UserItem
-import ru.studiq.mcashier.model.classes.App
 import ru.studiq.mcashier.model.classes.network.*
 import ru.studiq.mcashier.model.classes.network.providerclasses.ProviderDataUser
 import java.io.Serializable
-import java.util.*
 
 
 class RegisterActivity : AppCompatActivity() {
@@ -55,11 +43,7 @@ class RegisterActivity : AppCompatActivity() {
         edPassword = findViewById(R.id.register_text_password)
         btnSettings = findViewById(R.id.register_button_settings)
 
-        Settings.Application.currentUser = SettingsCommonKeysData(
-            Settings.Storage.ReadIntKeyValue(this.applicationContext, Settings.Storage.LastUserIndex) ?: -1,
-            Settings.Storage.ReadStringKeyValue(this.applicationContext, Settings.Storage.LastUserName) ?: ""
-        )
-        edUserName.text = Settings.Application.currentUser?.value ?: ""
+        edUserName.text = Settings.Application.currentUser?.userName ?: ""
 
         btnEnter.setOnClickListener { handleEnterClick() }
         btnBrowse.setOnClickListener { handleBrowseClick() }
@@ -134,10 +118,8 @@ class RegisterActivity : AppCompatActivity() {
             } else {
                 data.getSerializableExtra(Settings.Extra.UserObject) as? ProviderDataUser
             }
-            Settings.Application.currentUser = item.let {
-                SettingsCommonKeysData(it?.id ?: -1, it?.userName ?: "")
-            }
-            edUserName.text = Settings.Application.currentUser?.value ?: ""
+            Settings.Application.currentUser = item
+            edUserName.text = Settings.Application.currentUser?.userName ?: ""
 
         } else {
             // не удалось получить результат
