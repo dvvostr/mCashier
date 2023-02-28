@@ -15,6 +15,6 @@ class SalesActivity : CustomCompatActivity() {
     override fun setupActivity() {
         super.setupActivity()
         supportActionBar?.title = getString(R.string.cap_sales).toUpperCase()
-        supportActionBar?.subtitle = Settings.Application.currentDepartment?.departmentName
+        supportActionBar?.subtitle = Settings.Application.currentDepartment?.caption
     }
 }

@@ -46,10 +46,6 @@ object Common {
                 context.getString(R.string.cap_sales)
             ),
             ProviderDataMainMenuCard(
-                R.drawable.icon_salesreturn,
-                context.getString(R.string.cap_salesreturns)
-            ),
-            ProviderDataMainMenuCard(
                 R.drawable.icon_underconstruction,
                 context.getString(R.string.cap_underconstruction)
             ),
@@ -62,8 +58,12 @@ object Common {
                 context.getString(R.string.cap_underconstruction)
             ),
             ProviderDataMainMenuCard(
-                R.drawable.icon_reports,
-                context.getString(R.string.cap_reports)
+                R.drawable.icon_underconstruction,
+                context.getString(R.string.cap_underconstruction)
+            ),
+            ProviderDataMainMenuCard(
+                R.drawable.icon_underconstruction,
+                context.getString(R.string.cap_underconstruction)
             )
         )
         return items

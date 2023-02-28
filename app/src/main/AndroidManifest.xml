@@ -17,7 +17,10 @@
         android:theme="@style/Theme.MCashier"
         tools:targetApi="31">
         <activity
-            android:name=".DepartmentListActivity"
+            android:name=".UI.Activities.DepartmentRowItemActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.Activities.DepartmentListActivity"
             android:exported="false" />
         <activity
             android:name=".UI.Activities.SalesActivity"

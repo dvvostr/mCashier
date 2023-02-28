@@ -12,8 +12,10 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import ru.studiq.mcashier.R
+import ru.studiq.mcashier.UI.Activities.DepartmentListActivity
 import ru.studiq.mcashier.UI.Activities.Logon
 import ru.studiq.mcashier.UI.Activities.MainActivity
+import ru.studiq.mcashier.UI.Activities.load
 import ru.studiq.mcashier.UI.Activities.tools.SetupActivity
 import ru.studiq.mcashier.common.Common
 import ru.studiq.mcashier.interfaces.ICustomListActivityListener
@@ -50,22 +52,52 @@ class RegisterActivity : AppCompatActivity() {
         btnSettings.setOnClickListener { handleSettingsClick() }
     }
     private fun handleEnterClick() {
-        MainActivity.Companion.Logon(this, object : ICustomListActivityListener {
+        runOnUiThread {
+            Common.WaitDialog.show(this, false)
+        }
+        DepartmentListActivity.Companion.load(this, object : ICustomListActivityListener {
             override fun onSuccess(sender: Context?, code: Int, msg: String, data: Serializable?) {
-                super.onSuccess(sender, code, msg, data)
-                val intent = Intent(sender, MainActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
-                startActivity(intent)
+                try {
+                    super.onSuccess(sender, code, msg, data)
+                    val intent = Intent(sender, DepartmentListActivity::class.java).apply {
+                        putExtra(Settings.Activities.ParentActivity, RegisterActivity::class.java.name)
+                        putExtra(Settings.Activities.TargetActivity, MainActivity::class.java.name)
+                        putExtra(Settings.Activities.ActivityCaption, getString(R.string.cap_departments))
+                        putExtra(Settings.Activities.ListItems, (data as? ProviderDataBody))
+                    }
+                    startActivityForResult(intent, USERLIST_ACTIVITY_REQUEST_CODE)
+                } finally {
+                    Common.WaitDialog.dismiss()
+                }
             }
+
             override fun onError(sender: Context?, code: Int, msg: String, data: Serializable?) {
-                super.onError(sender, code, msg, data)
+                Common.WaitDialog.dismiss()
                 (sender as? RegisterActivity)?.let {
                     runOnUiThread {
                         Common.AlertDialog.show(it, getString(R.string.cap_error), msg, true)
                     }
                 }
+                super.onError(sender, code, msg, data)
             }
         })
+
+//        MainActivity.Companion.Logon(this, object : ICustomListActivityListener {
+//            override fun onSuccess(sender: Context?, code: Int, msg: String, data: Serializable?) {
+//                super.onSuccess(sender, code, msg, data)
+//                val intent = Intent(sender, MainActivity::class.java)
+//                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+//                startActivity(intent)
+//            }
+//            override fun onError(sender: Context?, code: Int, msg: String, data: Serializable?) {
+//                super.onError(sender, code, msg, data)
+//                (sender as? RegisterActivity)?.let {
+//                    runOnUiThread {
+//                        Common.AlertDialog.show(it, getString(R.string.cap_error), msg, true)
+//                    }
+//                }
+//            }
+//        })
     }
     private fun handleBrowseClick() {
         runOnUiThread {

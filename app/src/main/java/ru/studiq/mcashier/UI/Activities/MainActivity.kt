@@ -42,7 +42,7 @@ fun MainActivity.Companion.Logon(sender: Context?, listener: ICustomListActivity
     Handler().postDelayed({
         Common.WaitDialog.dismiss()
         listener.onSuccess(sender, 1, "OK", null)
-    }, 5000)
+    }, 3000)
 }
 
 class MainActivity : AppCompatActivity() {
@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         supportActionBar?.title = getString(R.string.app_name).uppercase()
-        supportActionBar?.subtitle = Settings.Application.currentDepartment?.departmentName ?: "<${getString(R.string.error_department_not_set)}>"
+        supportActionBar?.subtitle = Settings.Application.currentDepartment?.caption ?: "<${getString(R.string.error_department_not_set)}>"
         this.setupView()
     }
     @SuppressLint("ResourceAsColor")

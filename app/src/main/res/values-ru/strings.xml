@@ -9,6 +9,10 @@
     <string name="cap_selectuser">Выбор пользователя</string>
     <string name="cap_username">Имя пользователя</string>
     <string name="cap_departmentname">Отдел</string>
+    <string name="cap_departments">Отделы</string>
+    <string name="cap_department_select">Выберите отдел</string>
+
+
     <string name="cap_sales">Продажи</string>
     <string name="cap_underconstruction">В разработке</string>
     <string name="cap_salesreturns">Возвраты</string>

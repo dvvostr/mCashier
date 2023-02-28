@@ -10,7 +10,8 @@ import ru.studiq.mcashier.UI.Activities.security.RegisterActivity
 import ru.studiq.mcashier.model.Settings
 
 open class CustomCompatActivity : AppCompatActivity() {
-    private var parentActivityName: String = ""
+    public var parentActivityName: String = ""
+    public var targetActivityName: String = ""
     private var actionbar: ActionBar? = null
 
     open var caption: String
@@ -61,6 +62,7 @@ open class CustomCompatActivity : AppCompatActivity() {
                 actionBar.setDisplayHomeAsUpEnabled(true)
             }
         }
+        this.targetActivityName = intent.getStringExtra(Settings.Activities.TargetActivity) ?: ""
         intent.getStringExtra(Settings.Activities.ActivityCaption)?.let { value ->
             supportActionBar?.title = value.uppercase()
         }

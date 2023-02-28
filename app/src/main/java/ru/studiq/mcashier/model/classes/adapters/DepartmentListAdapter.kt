@@ -1,63 +1,57 @@
-//package ru.studiq.mcashier.model.classes.adapters
-//
-//
-//import android.view.LayoutInflater
-//import android.view.View
-//import android.view.ViewGroup
-//import android.widget.AdapterView
-//import android.widget.ImageView
-//import android.widget.TextView
-//import androidx.cardview.widget.CardView
-//import androidx.core.content.ContextCompat
-//import androidx.recyclerview.widget.RecyclerView
-//import ru.studiq.mcashier.R
-//import ru.studiq.mcashier.interfaces.ICardItemClickListener
-//import ru.studiq.mcashier.interfaces.IObjectClickListener
-//import ru.studiq.mcashier.model.classes.network.providerclasses.ProviderDataDepartment
-//import ru.studiq.mcashier.model.classes.network.providerclasses.ProviderDataMainMenuCard
-//
-//class DepartmentListAdapter( private val list: List<ProviderDataDepartment> ) : RecyclerView.Adapter<DepartmentListAdapter.ViewHolder>() {
-//    private lateinit var onItemClickListener: AdapterView.OnItemClickListener
-//
-//    lateinit var objectClickEvent: IObjectClickListener
-//
-//    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-//        val view: View = LayoutInflater.from(parent.context).inflate(R.layout.activity_main_card_item, parent, false)
-//        return ViewHolder(view)
-//    }
-//    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-//        holder.cardView.setCardBackgroundColor(ContextCompat.getColor(holder.cardView.context, R.color.background_semi_light))
-//        holder.imageView.setImageResource(list[position].image)
-//        holder.captionView.text = list[position].caption
-//        holder.setEvent(object: ICardItemClickListener {
-//            override fun onCardItemClick (view: View, position: Int) {
-//                cardItemClickEvent?.onCardItemClick(view, position)
-//            }
-//        })
-//    }
-//    override fun getItemCount(): Int = list.size
-//
-//    //************************************************//
-//    class ViewHolder(itemsView: View): RecyclerView.ViewHolder(itemsView), View.OnClickListener {
-//        internal var imageView: ImageView
-//        internal var captionView: TextView
-//        internal var cardView: CardView
-//        internal lateinit var iCardItemClickListener: ICardItemClickListener
-//
-//        init {
-//            this.cardView = itemsView.findViewById(R.id.main_card_cardview) as CardView
-//            this.imageView = itemsView.findViewById(R.id.main_card_imageView) as ImageView
-//            this.captionView = itemsView.findViewById(R.id.main_card_textView)
-//            this.itemView.setOnClickListener(this)
-//        }
-//        fun setEvent(iCardItemClickListener: ICardItemClickListener) {
-//            this.iCardItemClickListener = iCardItemClickListener
-//        }
-//        override fun onClick(view: View?) {
-//            if (view != null ) {
-//                this.iCardItemClickListener?.onCardItemClick(view!!, adapterPosition)
-//            }
-//        }
-//    }
-//}
-//
+package ru.studiq.mcashier.model.classes.adapters
+
+
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
+import ru.studiq.mcashier.R
+import ru.studiq.mcashier.interfaces.IObjectClickListener
+import ru.studiq.mcashier.model.classes.network.providerclasses.ProviderDataDepartment
+
+class DepartmentListAdapter( private val list: List<ProviderDataDepartment> ) : RecyclerView.Adapter<DepartmentListAdapter.ViewHolder>() {
+    private lateinit var onItemClickListener: AdapterView.OnItemClickListener
+
+    lateinit var objectClickEvent: IObjectClickListener
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val view: View = LayoutInflater.from(parent.context).inflate(R.layout.activity_department_row_item, parent, false)
+        return ViewHolder(view)
+    }
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.item = list[position]
+        holder.captionView.text = list[position].caption
+        holder.descriptionView.text = list[position].description
+        holder.setEvent(object: IObjectClickListener {
+            override fun onObjectItemClick(view: View, data: Any?) {
+                objectClickEvent?.onObjectItemClick(view, data)
+            }
+        })
+    }
+    override fun getItemCount(): Int = list.size
+
+    //************************************************//
+    class ViewHolder(itemsView: View): RecyclerView.ViewHolder(itemsView), View.OnClickListener {
+        internal var item: ProviderDataDepartment? = null
+        internal var captionView: TextView
+        internal var descriptionView: TextView
+        internal lateinit var iObjectClickListener: IObjectClickListener
+
+        init {
+            this.captionView = itemsView.findViewById(R.id.departmentlist_row_caption)
+            this.descriptionView = itemsView.findViewById(R.id.departmentlist_row_description)
+            this.itemView.setOnClickListener(this)
+        }
+        fun setEvent(listener: IObjectClickListener) {
+            this.iObjectClickListener = listener
+        }
+        override fun onClick(view: View?) {
+            if (view != null ) {
+                this.iObjectClickListener?.onObjectItemClick(view!!, item)
+            }
+        }
+    }
+}
+

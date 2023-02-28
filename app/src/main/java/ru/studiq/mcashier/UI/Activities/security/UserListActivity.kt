@@ -97,6 +97,7 @@ class UserListActivity : CustomListActivity() {
             val intent = Intent()
             val user = userItem.user
             Settings.Application.currentUser = user
+            Settings.Application.currentDepartment = null
             intent.putExtra(Settings.Extra.UserObject, user)
             setResult(RESULT_OK, intent)
             finish()

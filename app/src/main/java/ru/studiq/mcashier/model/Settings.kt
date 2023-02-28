@@ -141,6 +141,7 @@ public final class Settings {
     public final class Activities {
         companion object {
             val ParentActivity: String = "PARENT_ACTIVITY"
+            val TargetActivity: String = "TARGET_ACTIVITY"
             val ActivityCaption: String = "CAPTION_ACTIVITY"
             val ListItems: String = "LIST_DATA_ITEMS"
             public fun initialize() {
