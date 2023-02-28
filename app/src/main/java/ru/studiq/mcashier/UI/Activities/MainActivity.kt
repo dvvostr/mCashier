@@ -25,13 +25,13 @@ import ru.studiq.mcashier.UI.Activities.security.RegisterActivity
 import ru.studiq.mcashier.UI.Activities.security.UserProfileActivity
 import ru.studiq.mcashier.UI.Activities.tools.SetupActivity
 import ru.studiq.mcashier.UI.Activities.tools.ToolsActivity
-import ru.studiq.mcashier.adapters.MainCardAdapter
+import ru.studiq.mcashier.model.classes.adapters.MainCardAdapter
 import ru.studiq.mcashier.common.Common
 import ru.studiq.mcashier.common.SpacesItemDecoration
 import ru.studiq.mcashier.interfaces.ICardItemClickListener
 import ru.studiq.mcashier.interfaces.ICustomListActivityListener
 import ru.studiq.mcashier.model.Settings
-import ru.studiq.mcashier.model.classes.items.MainCardItem
+import ru.studiq.mcashier.model.classes.network.providerclasses.ProviderDataMainMenuCard
 
 
 fun MainActivity.Companion.Logon(sender: Context?, listener: ICustomListActivityListener) {
@@ -46,7 +46,7 @@ fun MainActivity.Companion.Logon(sender: Context?, listener: ICustomListActivity
 }
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var items: List<MainCardItem>
+    private lateinit var items: List<ProviderDataMainMenuCard>
     private lateinit var cardList: RecyclerView
     private lateinit var adapter: MainCardAdapter
     private val REQUEST_ACCESS_TYPE = 1

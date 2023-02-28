@@ -12,7 +12,7 @@
         android:id="@+id/main_card_cardview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:cardCornerRadius="8dp"
+        app:cardCornerRadius="5dp"
         android:background="@color/text_gray"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

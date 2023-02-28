@@ -8,7 +8,7 @@ import ru.studiq.mcashier.R
 import ru.studiq.mcashier.UI.Classes.CustomAlertDialog
 import ru.studiq.mcashier.model.SettingData
 import ru.studiq.mcashier.UI.Classes.CustomWaitDialog
-import ru.studiq.mcashier.model.classes.items.MainCardItem
+import ru.studiq.mcashier.model.classes.network.providerclasses.ProviderDataMainMenuCard
 
 typealias JSONText = String
 
@@ -39,29 +39,29 @@ object Common {
         }
         return jsonString
     }
-    fun getMainMenuItems(context: Context): List<MainCardItem> {
-        val items: List<MainCardItem>  = listOf(
-            MainCardItem(
+    fun getMainMenuItems(context: Context): List<ProviderDataMainMenuCard> {
+        val items: List<ProviderDataMainMenuCard>  = listOf(
+            ProviderDataMainMenuCard(
                 R.drawable.icon_posterminal,
                 context.getString(R.string.cap_sales)
             ),
-            MainCardItem(
+            ProviderDataMainMenuCard(
                 R.drawable.icon_salesreturn,
                 context.getString(R.string.cap_salesreturns)
             ),
-            MainCardItem(
+            ProviderDataMainMenuCard(
                 R.drawable.icon_underconstruction,
                 context.getString(R.string.cap_underconstruction)
             ),
-            MainCardItem(
+            ProviderDataMainMenuCard(
                 R.drawable.icon_underconstruction,
                 context.getString(R.string.cap_underconstruction)
             ),
-            MainCardItem(
+            ProviderDataMainMenuCard(
                 R.drawable.icon_underconstruction,
                 context.getString(R.string.cap_underconstruction)
             ),
-            MainCardItem(
+            ProviderDataMainMenuCard(
                 R.drawable.icon_reports,
                 context.getString(R.string.cap_reports)
             )

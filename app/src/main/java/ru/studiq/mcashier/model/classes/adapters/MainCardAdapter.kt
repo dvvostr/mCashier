@@ -1,23 +1,19 @@
-package ru.studiq.mcashier.adapters
+package ru.studiq.mcashier.model.classes.adapters
 
-import android.annotation.SuppressLint
-import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.annotation.RequiresApi
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import ru.studiq.mcashier.R
 import ru.studiq.mcashier.interfaces.ICardItemClickListener
-import ru.studiq.mcashier.model.classes.items.MainCardItem
-import java.security.AccessController.getContext
+import ru.studiq.mcashier.model.classes.network.providerclasses.ProviderDataMainMenuCard
 
-class MainCardAdapter( private val list: List<MainCardItem> ) : RecyclerView.Adapter<MainCardAdapter.ViewHolder>() {
+class MainCardAdapter( private val list: List<ProviderDataMainMenuCard> ) : RecyclerView.Adapter<MainCardAdapter.ViewHolder>() {
     private lateinit var onItemClickListener: AdapterView.OnItemClickListener
 
     lateinit var cardItemClickEvent: ICardItemClickListener
