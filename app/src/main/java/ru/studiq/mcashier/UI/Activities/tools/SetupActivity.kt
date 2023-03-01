@@ -22,7 +22,7 @@ class SetupActivity : CustomCompatActivity() {
         super.setupActivity()
         setContentView(R.layout.activity_setup)
         this.caption = getString(R.string.cap_settings).toUpperCase()
-        this.setIcon(R.drawable.ic_icon_title_mixer_spacer)
+        this.setIcon(R.drawable.icon_title_mixer_spacer)
         if (fragmentManager.findFragmentById(android.R.id.content) == null) {
             fragmentManager.beginTransaction()
                 .add(android.R.id.content, SettingsFragment()).commit()

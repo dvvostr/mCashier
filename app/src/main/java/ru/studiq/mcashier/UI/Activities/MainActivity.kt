@@ -5,11 +5,13 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.text.style.RelativeSizeSpan
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -22,16 +24,22 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ru.studiq.mcashier.R
 import ru.studiq.mcashier.UI.Activities.security.RegisterActivity
+import ru.studiq.mcashier.UI.Activities.security.UserListActivity
 import ru.studiq.mcashier.UI.Activities.security.UserProfileActivity
+import ru.studiq.mcashier.UI.Activities.security.load
 import ru.studiq.mcashier.UI.Activities.tools.SetupActivity
 import ru.studiq.mcashier.UI.Activities.tools.ToolsActivity
-import ru.studiq.mcashier.model.classes.adapters.MainCardAdapter
 import ru.studiq.mcashier.common.Common
 import ru.studiq.mcashier.common.SpacesItemDecoration
 import ru.studiq.mcashier.interfaces.ICardItemClickListener
 import ru.studiq.mcashier.interfaces.ICustomListActivityListener
 import ru.studiq.mcashier.model.Settings
+import ru.studiq.mcashier.model.classes.adapters.MainCardAdapter
+import ru.studiq.mcashier.model.classes.network.ProviderDataBody
+import ru.studiq.mcashier.model.classes.network.providerclasses.ProviderDataDepartment
 import ru.studiq.mcashier.model.classes.network.providerclasses.ProviderDataMainMenuCard
+import ru.studiq.mcashier.model.classes.network.providerclasses.ProviderDataUser
+import java.io.Serializable
 
 
 fun MainActivity.Companion.Logon(sender: Context?, listener: ICustomListActivityListener) {
@@ -127,6 +135,10 @@ class MainActivity : AppCompatActivity() {
                 this.handleMenuCaptionClick()
                 true
             }
+            R.id.menu_main_department -> {
+                this.handleMenuDepartmentClick()
+                true
+            }
             R.id.menu_main_exit -> {
                 this.handleMenuLogoutClick()
                 true
@@ -145,6 +157,35 @@ class MainActivity : AppCompatActivity() {
     }
     private fun handleMenuCaptionClick() {
         startActivity(Intent(this, UserProfileActivity::class.java))
+    }
+    private fun handleMenuDepartmentClick(){
+        runOnUiThread {
+            Common.WaitDialog.show(this, false)
+        }
+        DepartmentListActivity.Companion.load(this, object : ICustomListActivityListener {
+            override fun onSuccess(sender: Context?, code: Int, msg: String, data: Serializable?) {
+                try {
+                    super.onSuccess(sender, code, msg, data)
+                    val intent = Intent(sender, DepartmentListActivity::class.java).apply {
+                        putExtra(Settings.Activities.ParentActivity, RegisterActivity::class.java.name)
+                        putExtra(Settings.Activities.ActivityCaption, getString(R.string.cap_departments))
+                        putExtra(Settings.Activities.ListItems, (data as? ProviderDataBody))
+                    }
+                    startActivityForResult(intent, RegisterActivity.DEPARTMENTLIST_ACTIVITY_REQUEST_CODE)
+                } finally {
+                    Common.WaitDialog.dismiss()
+                }
+            }
+            override fun onError(sender: Context?, code: Int, msg: String, data: Serializable?) {
+                Common.WaitDialog.dismiss()
+                (sender as? RegisterActivity)?.let {
+                    runOnUiThread {
+                        Common.AlertDialog.show(it, getString(R.string.cap_error), msg, true)
+                    }
+                }
+                super.onError(sender, code, msg, data)
+            }
+        })
     }
     private fun handleMenuLogoutClick() {
         val intent = Intent(this, RegisterActivity::class.java)
@@ -172,6 +213,25 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        Log.d("RESULT", "Code ${requestCode}")
+        if (resultCode == RESULT_OK && data != null) {
+            val item: ProviderDataDepartment? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                data.getSerializableExtra(Settings.Extra.UserObject, ProviderDataDepartment::class.java) as? ProviderDataDepartment
+            } else {
+                data.getSerializableExtra(Settings.Extra.UserObject) as? ProviderDataDepartment
+            }
+            Settings.Application.currentDepartment = item
+            supportActionBar?.subtitle = Settings.Application.currentDepartment?.caption ?: ""
 
+        } else {
+            // не удалось получить результат
+        }
+        super.onActivityResult(requestCode, resultCode, data)
+    }
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        Log.d("RESULT", "Code ${requestCode}")
+    }
 
 }

@@ -51,7 +51,7 @@ open class CustomCompatActivity : AppCompatActivity() {
     open fun setupActivity() {
         this.actionbar = this.supportActionBar
         actionbar?.setDisplayHomeAsUpEnabled(true)
-        actionbar?.setHomeAsUpIndicator(R.drawable.ic_chevron_thin_actionbar_left);
+        actionbar?.setHomeAsUpIndicator(R.drawable.icon_chevron_left);
         actionbar?.displayOptions = androidx.appcompat.app.ActionBar.DISPLAY_SHOW_HOME or
                 androidx.appcompat.app.ActionBar.DISPLAY_SHOW_TITLE or
                 androidx.appcompat.app.ActionBar.DISPLAY_HOME_AS_UP or

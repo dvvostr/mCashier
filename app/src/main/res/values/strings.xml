@@ -34,7 +34,15 @@
     <string name="cap_error">Error</string>
 
     <string name="error_unassigned">Unassigned error</string>
+    <string name="error_user_not_set">User not selected</string>
     <string name="error_department_not_set">Unknown department</string>
+
+    <string name="error_scanner_cancelled">Code scanner is cancelled.</string>
+    <string name="error_camera_permission_not_granted" >Camera permission is not granted.</string>
+    <string name="error_scanner_default_message" >Failed to scan code: %1$s</string>
+    <string name="error_app_name_unavailable">App name is not set.</string>
+
+
 
     <string name="settings_not_selected">Not selected</string>
     <string name="settings_common">Основное</string>

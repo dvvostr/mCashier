@@ -2,6 +2,6 @@
 <layer-list
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:drawable="@drawable/ic_icon_title_mixer"
+        android:drawable="@drawable/icon_title_mixer"
         android:right="12dp"/>
 </layer-list>

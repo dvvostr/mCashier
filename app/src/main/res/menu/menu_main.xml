@@ -4,7 +4,7 @@
     <item
         android:id="@+id/menu_main_root"
         android:orderInCategory="0"
-        android:icon="@drawable/ic_icon_more_vert"
+        android:icon="@drawable/icon_more_vert"
         app:showAsAction="always"
         android:title="">
         <menu>
@@ -14,22 +14,31 @@
                     android:title="@string/cap_empty" />
             </group>
             <group android:id="@+id/menu_main_group2" >
+                <item
+                    android:id="@+id/menu_main_department"
+                    android:orderInCategory="10"
+                    android:icon="@drawable/icon_department"
+                    android:title="@string/cap_departmentname"
+                    app:showAsAction="withText"
+                    />
+            </group>
+            <group android:id="@+id/menu_main_group3" >
             <item
                 android:id="@+id/menu_main_settings"
                 android:orderInCategory="10"
-                android:icon="@drawable/ic_icon_title_gear"
+                android:icon="@drawable/icon_title_gear"
                 android:title="@string/cap_settings"
                 app:showAsAction="withText"
                 />
             <item
                 android:id="@+id/menu_main_tools"
                 android:orderInCategory="20"
-                android:icon="@drawable/ic_icon_title_mixer"
+                android:icon="@drawable/icon_title_mixer"
                 android:title="@string/cap_tools"
                 app:showAsAction="withText"
                 />
             </group>
-            <group android:id="@+id/menu_main_group3" >
+            <group android:id="@+id/menu_main_group4" >
             <item
                 android:id="@+id/menu_main_exit"
                 android:orderInCategory="20"

@@ -29,6 +29,13 @@
 
     <string name="error_unassigned">Неизвестная ощибка</string>
     <string name="error_department_not_set">Подразделение не выбрано</string>
+    <string name="error_user_not_set">Не выбран пользователь</string>
+
+    <string name="error_scanner_cancelled">Сканирование отменено.</string>
+    <string name="error_camera_permission_not_granted">Нет разрешения на камеру.</string>
+    <string name="error_scanner_default_message" >Ошибка чтения баркода: %1$s</string>
+    <string name="error_app_name_unavailable">Имя приложения не задано.</string>
+
 
     <string name="settings_not_selected">Not selected</string>
     <string name="settings_common">Основное</string>

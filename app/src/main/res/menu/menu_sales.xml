@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_sales_root"
+        android:orderInCategory="0"
+        android:icon="@drawable/icon_more_vert"
+        app:showAsAction="always"
+        android:title="">
+        <menu>
+            <group android:id="@+id/menu_sales_group2" >
+                <item
+                    android:id="@+id/menu_sales_department"
+                    android:orderInCategory="10"
+                    android:icon="@drawable/icon_department"
+                    android:title="@string/cap_departmentname"
+                    app:showAsAction="withText"
+                    />
+            </group>
+
+        </menu>
+    </item>
+</menu>

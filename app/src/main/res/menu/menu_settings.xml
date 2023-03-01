@@ -4,7 +4,7 @@
 
     <item android:title="About"
         android:id="@+id/menu_settings_about"
-        android:icon="@drawable/ic_icon_title_question_circle"
+        android:icon="@drawable/icon_title_question_circle"
         app:showAsAction="always"
         />
 </menu>

@@ -28,6 +28,7 @@ import java.io.Serializable
 class RegisterActivity : AppCompatActivity() {
     companion object {
         public const val USERLIST_ACTIVITY_REQUEST_CODE = 1
+        public const val DEPARTMENTLIST_ACTIVITY_REQUEST_CODE = 2
     }
     private lateinit var imageUser: ImageView
     private lateinit var edUserName: TextView
@@ -52,52 +53,39 @@ class RegisterActivity : AppCompatActivity() {
         btnSettings.setOnClickListener { handleSettingsClick() }
     }
     private fun handleEnterClick() {
-        runOnUiThread {
-            Common.WaitDialog.show(this, false)
-        }
-        DepartmentListActivity.Companion.load(this, object : ICustomListActivityListener {
-            override fun onSuccess(sender: Context?, code: Int, msg: String, data: Serializable?) {
-                try {
-                    super.onSuccess(sender, code, msg, data)
-                    val intent = Intent(sender, DepartmentListActivity::class.java).apply {
-                        putExtra(Settings.Activities.ParentActivity, RegisterActivity::class.java.name)
-                        putExtra(Settings.Activities.TargetActivity, MainActivity::class.java.name)
-                        putExtra(Settings.Activities.ActivityCaption, getString(R.string.cap_departments))
-                        putExtra(Settings.Activities.ListItems, (data as? ProviderDataBody))
+        if (Settings.Application.currentUser == null || Settings.Application.currentUser?.id ?: -1 <= 0) {
+            Common.AlertDialog.show(this, getString(R.string.cap_error), getString(R.string.error_user_not_set))
+            return
+        } else {
+            runOnUiThread {
+                Common.WaitDialog.show(this, false)
+            }
+            DepartmentListActivity.Companion.load(this, object : ICustomListActivityListener {
+                override fun onSuccess(sender: Context?, code: Int, msg: String, data: Serializable? ) {
+                    try {
+                        super.onSuccess(sender, code, msg, data)
+                        val intent = Intent(sender, DepartmentListActivity::class.java).apply {
+                            putExtra(Settings.Activities.ParentActivity, RegisterActivity::class.java.name)
+                            putExtra(Settings.Activities.TargetActivity, MainActivity::class.java.name)
+                            putExtra(Settings.Activities.ActivityCaption, getString(R.string.cap_departments))
+                            putExtra(Settings.Activities.ListItems, (data as? ProviderDataBody))
+                        }
+                        startActivityForResult(intent, USERLIST_ACTIVITY_REQUEST_CODE)
+                    } finally {
+                        Common.WaitDialog.dismiss()
                     }
-                    startActivityForResult(intent, USERLIST_ACTIVITY_REQUEST_CODE)
-                } finally {
+                }
+                override fun onError(sender: Context?, code: Int, msg: String, data: Serializable?) {
                     Common.WaitDialog.dismiss()
-                }
-            }
-
-            override fun onError(sender: Context?, code: Int, msg: String, data: Serializable?) {
-                Common.WaitDialog.dismiss()
-                (sender as? RegisterActivity)?.let {
-                    runOnUiThread {
-                        Common.AlertDialog.show(it, getString(R.string.cap_error), msg, true)
+                    (sender as? RegisterActivity)?.let {
+                        runOnUiThread {
+                            Common.AlertDialog.show(it, getString(R.string.cap_error), msg, true)
+                        }
                     }
+                    super.onError(sender, code, msg, data)
                 }
-                super.onError(sender, code, msg, data)
-            }
-        })
-
-//        MainActivity.Companion.Logon(this, object : ICustomListActivityListener {
-//            override fun onSuccess(sender: Context?, code: Int, msg: String, data: Serializable?) {
-//                super.onSuccess(sender, code, msg, data)
-//                val intent = Intent(sender, MainActivity::class.java)
-//                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
-//                startActivity(intent)
-//            }
-//            override fun onError(sender: Context?, code: Int, msg: String, data: Serializable?) {
-//                super.onError(sender, code, msg, data)
-//                (sender as? RegisterActivity)?.let {
-//                    runOnUiThread {
-//                        Common.AlertDialog.show(it, getString(R.string.cap_error), msg, true)
-//                    }
-//                }
-//            }
-//        })
+            })
+        }
     }
     private fun handleBrowseClick() {
         runOnUiThread {
