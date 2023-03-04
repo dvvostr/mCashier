@@ -38,10 +38,9 @@
     <string name="error_department_not_set">Unknown department</string>
 
     <string name="error_scanner_cancelled">Code scanner is cancelled.</string>
-    <string name="error_camera_permission_not_granted" >Camera permission is not granted.</string>
-    <string name="error_scanner_default_message" >Failed to scan code: %1$s</string>
+    <string name="error_camera_permission_not_granted">Camera permission is not granted.</string>
+    <string name="error_scanner_default_message">Failed to scan code: %1$s</string>
     <string name="error_app_name_unavailable">App name is not set.</string>
-
 
 
     <string name="settings_not_selected">Not selected</string>
@@ -56,11 +55,20 @@
 
     <string name="settings_cap_connection_desc">Service address URL</string>
     <string name="settings_cap_devicetype">Device type</string>
+    <string name="settings_cap_hardware_scanner_priority">Hardware scanner priority</string>
+    <string name="settings_cap_manual_barcode">Enter barcode manual</string>
 
     <string name="settings_cap_check_value">Check value</string>
     <string name="settings_cap_digital_value">Digital value</string>
     <string name="settings_cap_HEX_value">HEX value</string>
     <string name="settings_cap_custom_value">Custom value [0-7] default: 3</string>
+
+    <string name="settings_profile_work" translatable="false">Work</string>
+    <string name="settings_profile_test" translatable="false">Test</string>
+    <string name="settings_profile_debug" translatable="false">Debug</string>
+
+    <string name="settings_devicetype_android">Android device</string>
+    <string name="settings_devicetype_honeywell_eda50k">Honeywell EDA50K</string>
 
     <string name="settings_cap_category_02">Category 02</string>
     <string name="settings_cap_category_03">Category 03</string>
@@ -69,7 +77,5 @@
     <string name="settings_cap_Key1">Key 1</string>
     <string name="settings_cap_Key2">Key 2</string>
     <string name="settings_cap_Key3">Key 3</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

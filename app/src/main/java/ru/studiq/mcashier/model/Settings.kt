@@ -40,6 +40,18 @@ public final class Settings {
                 strDepartment = Gson().toJson(value)
                 Storage.WriteStringKeyValue(App.appContext, Storage.LastDepartment, strDepartment)
             }
+            public var allowManualInputBarcode: Boolean = false
+                get() {
+                    return App.instance?.let { value ->
+                        Storage.getPreferenceBoolean(value.getString(R.string.settings_hw_manual_barcode))
+                    } == true
+                }
+            public var deviceType: Int = -1
+                get() {
+                    return App.instance?.let { value ->
+                        Storage.getPreferenceStringInteger(value.getString(R.string.setting_hw_devicetype))
+                    } ?: -1
+                }
             public fun initialize() {
                 Network.initialize()
                 strUser = Storage.ReadStringKeyValue(App.appContext, Storage.LastUser) ?: ""
@@ -120,6 +132,13 @@ public final class Settings {
             }
             public fun getPreferenceString(context: Context, key: String): String? {
                 return PreferenceManager.getDefaultSharedPreferences(context).getString(key, "")
+            }
+            public fun getPreferenceBoolean(key: String): Boolean? {
+                try {
+                    return PreferenceManager.getDefaultSharedPreferences(App.appContext).getBoolean(key, false) ?: false
+                } catch (ex: Exception) {
+                    return false
+                }
             }
             public fun ReadStringKeyValue(context: Context, key: String): String? {
                 val settings =  context.getSharedPreferences(Settings.Storage.SharedPreferences,Context.MODE_PRIVATE)

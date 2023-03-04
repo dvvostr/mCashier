@@ -54,7 +54,7 @@ class RegisterActivity : AppCompatActivity() {
     }
     private fun handleEnterClick() {
         if (Settings.Application.currentUser == null || Settings.Application.currentUser?.id ?: -1 <= 0) {
-            Common.AlertDialog.show(this, getString(R.string.cap_error), getString(R.string.error_user_not_set))
+            Common.AlertDialog.show(this, getString(R.string.cap_error), getString(R.string.error_user_not_set), true)
             return
         } else {
             runOnUiThread {

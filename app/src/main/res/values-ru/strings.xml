@@ -37,19 +37,25 @@
     <string name="error_app_name_unavailable">Имя приложения не задано.</string>
 
 
-    <string name="settings_not_selected">Not selected</string>
+    <string name="settings_not_selected">Не выбрано</string>
     <string name="settings_common">Основное</string>
     <string name="settings_category_network">Сеть</string>
 
 
-    <string name="settings_cap_URL">Connection pofile</string>
+    <string name="settings_cap_URL">Профиль подключения</string>
     <string name="settings_cap_connect_timeout">Задержка подключения (сек.)</string>
     <string name="settings_cap_network_read_timeout">Задержка чтения (сек.)</string>
     <string name="settings_cap_network_write_timeout">Задержка записи (сек.)</string>
 
 
-    <string name="settings_cap_connection_desc">Service address URL</string>
-    <string name="settings_cap_devicetype">Device type</string>
+    <string name="settings_cap_connection_desc">Адрес сервиса</string>
+    <string name="settings_cap_devicetype">Тип устройства</string>
+    <string name="settings_cap_hardware_scanner_priority">Сначала использовать сканер бар-кода</string>
+    <string name="settings_cap_manual_barcode">Вводить бар-код вручную</string>
+
+
+    <string name="settings_devicetype_android">Устройство Android</string>
+    <string name="settings_devicetype_honeywell_eda50k">Honeywell EDA50K</string>
 
     <string name="settings_cap_check_value">Check value</string>
     <string name="settings_cap_digital_value">Digital value</string>

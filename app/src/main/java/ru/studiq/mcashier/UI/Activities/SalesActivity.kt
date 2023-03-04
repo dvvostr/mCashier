@@ -2,14 +2,8 @@ package ru.studiq.mcashier.UI.Activities
 
 import android.content.Context
 import android.content.Intent
-import android.content.res.ColorStateList
-import android.graphics.drawable.GradientDrawable
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.SpannableString
-import android.text.style.ForegroundColorSpan
-import android.text.style.RelativeSizeSpan
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -17,24 +11,46 @@ import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.MenuCompat
-import com.google.mlkit.common.MlKitException
-import com.google.mlkit.vision.barcode.common.Barcode
-import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
-import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
+import com.google.zxing.client.android.Intents
+import com.journeyapps.barcodescanner.ScanContract
+import com.journeyapps.barcodescanner.ScanIntentResult
+import com.journeyapps.barcodescanner.ScanOptions
 import ru.studiq.mcashier.R
 import ru.studiq.mcashier.UI.Activities.security.RegisterActivity
+import ru.studiq.mcashier.UI.Activities.tools.CustomZXingScannerActivity
 import ru.studiq.mcashier.common.Common
 import ru.studiq.mcashier.interfaces.ICustomListActivityListener
 import ru.studiq.mcashier.model.Settings
 import ru.studiq.mcashier.model.classes.activities.common.CustomCompatActivity
+import ru.studiq.mcashier.model.classes.hw.CustomHardwareError
+import ru.studiq.mcashier.model.classes.hw.barcode.*
 import ru.studiq.mcashier.model.classes.network.ProviderDataBody
 import ru.studiq.mcashier.model.classes.network.providerclasses.ProviderDataDepartment
 import java.io.Serializable
-import java.util.*
 
 class SalesActivity : CustomCompatActivity() {
-    private var allowManualInput: Boolean = true
+    private var allowManualInput: Boolean = Settings.Application.allowManualInputBarcode
     private var barcodeResultView: TextView? = null
+
+    private var scanner: CustomBarcodeScanner? = null
+
+//    private val barcodeLauncher = registerForActivityResult<ScanOptions, ScanIntentResult>(
+//        ScanContract()
+//    ) { result: ScanIntentResult ->
+//        if (result.contents == null) {
+//            val originalIntent = result.originalIntent
+//            if (originalIntent == null) {
+//                Log.d("MainActivity", "Cancelled scan")
+//                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show()
+//            } else if (originalIntent.hasExtra(Intents.Scan.MISSING_CAMERA_PERMISSION)) {
+//                Log.d("MainActivity", "Cancelled scan due to missing camera permission")
+//                Toast.makeText(this, "Cancelled due to missing camera permission", Toast.LENGTH_LONG).show()
+//            }
+//        } else {
+//            Log.d("MainActivity", "Scanned")
+//            Toast.makeText(this, "Scanned: " + result.contents, Toast.LENGTH_LONG).show()
+//        }
+//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,9 +61,26 @@ class SalesActivity : CustomCompatActivity() {
         setContentView(R.layout.activity_sales)
         supportActionBar?.title = getString(R.string.cap_sales).toUpperCase()
         supportActionBar?.subtitle = Settings.Application.currentDepartment?.caption
-
         barcodeResultView = findViewById(R.id.barcode_result_view)
+        this.scanner = when (Settings.Application.deviceType) {
+//            1 -> GoogleBarcodeScanner(this, GoogleBarcodeScannerOptions(Settings.Application.allowManualInputBarcode))
+            1 -> SimpleBarcodeScanner(this, SimpleBarcodeScannerOptions())
+            2 -> HoneywellBarcodeScanner(this, HoneywellBarcodeScannerOptions())
+            else -> null
+        }
+        this.isLockBackNavigation = true
+//        this.onBackPressedDispatcher.addCallback(this){
+//            if (!isLockBackNavigation)
+//                finish()
+////            else
+////                isLockBackNavigation = false
+//        }
     }
+
+//    override fun onBackPressed() {
+//        if (!isLockBackNavigation)
+//            super.onBackPressed()
+//    }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_sales, menu)
         if (menu != null) {
@@ -117,29 +150,27 @@ class SalesActivity : CustomCompatActivity() {
 
     // ***** SCANNER ***** //
     fun onScanButtonClicked(view: View) {
-        val optionsBuilder = GmsBarcodeScannerOptions.Builder()
-        if (allowManualInput) {
-            optionsBuilder.allowManualInput()
-        }
-        val gmsBarcodeScanner = GmsBarcodeScanning.getClient(this, optionsBuilder.build())
-        gmsBarcodeScanner
-            .startScan()
-            .addOnSuccessListener { barcode: Barcode ->
-                try {
-                    val obj = barcode
-                    barcodeResultView?.text = obj.displayValue
-//                    barcodeResultView!!.text = getSuccessfulMessage(barcode)
-                } catch (ex: Exception) {
-                    Toast.makeText(this, ex.message, Toast.LENGTH_LONG).show()
-                }
+        val options = ScanOptions()
+////            .setOrientationLocked(false)
+////            .setTimeout(8000)
+//            .setCaptureActivity(
+//                CustomZXingScannerActivity::class.java
+//            )
+//
+//        barcodeLauncher.launch(options)
+        scanner?.scan (object : IBarcodeReadListener {
+            override fun onBarcodeRead(sender: CustomBarcodeScanner, barcode: String?) {
+                barcodeResultView?.text = barcode ?: "NONE"
             }
-            .addOnFailureListener { e: Exception ->
-                barcodeResultView!!.text = getErrorMessage(e)
+            override fun onCancel(sender: CustomBarcodeScanner) {
+                barcodeResultView?.text = "CANCEL"
             }
-            .addOnCanceledListener {
-                barcodeResultView!!.text = getString(R.string.error_scanner_cancelled)
+            override fun onError(sender: CustomBarcodeScanner, error: CustomHardwareError?) {
+                barcodeResultView?.text = "${(error?.code ?: -1).toString()} : ${error?.text ?: "UNKNOWN"}"
             }
+        })
     }
+
 
     override fun onSaveInstanceState(savedInstanceState: Bundle) {
         savedInstanceState.putBoolean(KEY_ALLOW_MANUAL_INPUT, allowManualInput)
@@ -149,33 +180,6 @@ class SalesActivity : CustomCompatActivity() {
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
         allowManualInput = savedInstanceState.getBoolean(KEY_ALLOW_MANUAL_INPUT)
-    }
-
-    private fun getSuccessfulMessage(barcode: Barcode): String {
-        val barcodeValue =
-            String.format(
-                Locale.US,
-                "Display Value: %s\nRaw Value: %s\nFormat: %s\nValue Type: %s",
-                barcode.displayValue,
-                barcode.rawValue,
-                barcode.format,
-                barcode.valueType
-            )
-        return barcodeValue
-    }
-
-    private fun getErrorMessage(e: Exception): String? {
-        return if (e is MlKitException) {
-            when (e.errorCode) {
-                MlKitException.CODE_SCANNER_CAMERA_PERMISSION_NOT_GRANTED ->
-                    getString(R.string.error_camera_permission_not_granted)
-                MlKitException.CODE_SCANNER_APP_NAME_UNAVAILABLE ->
-                    getString(R.string.error_app_name_unavailable)
-                else -> getString(R.string.error_scanner_default_message, e)
-            }
-        } else {
-            e.message
-        }
     }
 
     companion object {

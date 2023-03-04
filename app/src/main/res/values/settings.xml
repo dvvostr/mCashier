@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="setting_common_devicetype" translatable="false">setting_common_devicetype</string>
+    <string name="setting_hw_devicetype" translatable="false">setting_common_devicetype</string>
     <string name="setting_id_connection" translatable="false">settings_network_connection</string>
     <string name="setting_net_connect_timeout" translatable="false">settings_network_connecttimeout</string>
     <string name="setting_net_read_timeout" translatable="false">settings_network_readtimeout</string>
     <string name="setting_net_write_timeout" translatable="false">settings_network_writetimeout</string>
-
+    <string name="setting_hw_scanner_priority" translatable="false">settings_hardware_scanner_priority</string>
+    <string name="settings_hw_manual_barcode" translatable="false">settings_manual_barcode</string>
 </resources>

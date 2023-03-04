@@ -114,7 +114,7 @@ class SetupActivity : CustomCompatActivity() {
             super.onCreate(savedInstanceState)
             this.addPreferencesFromResource(R.xml.preferences)
             bindPreferenceSummaryToValue(findPreference(getString(R.string.setting_id_connection)))
-            bindPreferenceSummaryToValue(findPreference(getString(R.string.setting_common_devicetype)))
+            bindPreferenceSummaryToValue(findPreference(getString(R.string.setting_hw_devicetype)))
         }
     }
 }

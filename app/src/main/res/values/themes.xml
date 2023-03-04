@@ -108,4 +108,22 @@
         <item name="android:activityCloseExitAnimation">@anim/slide_out_right</item>
     </style>
     <!-- ***** END ANIMATIONS ***** -->
-</resources>
+
+    <style name="MtButtonStyle" parent="Widget.MaterialComponents.Button">
+        <item name="colorPrimary">@color/tint</item>
+    </style>
+    <style name="MtTintButtonStyle" parent="MtButtonStyle">
+        <item name="materialThemeOverlay">@style/TintButtonThemeOverlay</item>
+    </style>
+    <style name="MtActionRunButtonStyle" parent="MtButtonStyle">
+        <item name="materialThemeOverlay">@style/ActionButtonThemeOverlay</item>
+    </style>
+
+    <style name="ActionButtonThemeOverlay">
+        <item name="colorPrimary">@color/action_run</item>
+    </style>
+    <style name="TintButtonThemeOverlay">
+        <item name="colorPrimary">@color/mt_button</item>
+    </style>
+
+    </resources>

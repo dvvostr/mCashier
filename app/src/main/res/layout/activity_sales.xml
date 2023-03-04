@@ -19,50 +19,51 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="0dp"
         android:layout_height="72dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/control_tab_rounded_72"
+        android:background="@color/background_light"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent">
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/sales_button_scan"
+            style="@style/MtActionRunButtonStyle"
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginBottom="12dp"
-            android:background="@drawable/control_button_rounded"
+            android:layout_height="62dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
             android:onClick="onScanButtonClicked"
             android:text="SCAN"
+            app:cornerRadius="30dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/sales_button_key2"
             app:layout_constraintStart_toEndOf="@+id/sales_button_key1"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/sales_button_key1"
+            style="@style/MtTintButtonStyle"
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
+            android:layout_height="62dp"
             android:layout_marginStart="16dp"
-            android:background="@drawable/control_button_rounded"
             android:text="Key 1"
-            app:layout_constraintBottom_toBottomOf="@+id/sales_button_scan"
+            app:cornerRadius="30dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/sales_button_scan" />
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/sales_button_key2"
+            style="@style/MtTintButtonStyle"
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
+            android:layout_height="62dp"
             android:layout_marginEnd="16dp"
-            android:background="@drawable/control_button_rounded"
+            app:cornerRadius="30dp"
             android:text="Key 2"
             app:layout_constraintBottom_toBottomOf="@+id/sales_button_scan"
             app:layout_constraintEnd_toEndOf="parent"

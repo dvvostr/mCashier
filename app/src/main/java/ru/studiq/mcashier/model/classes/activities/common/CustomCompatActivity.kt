@@ -12,6 +12,7 @@ import ru.studiq.mcashier.model.Settings
 open class CustomCompatActivity : AppCompatActivity() {
     public var parentActivityName: String = ""
     public var targetActivityName: String = ""
+    public var isLockBackNavigation: Boolean = false
     private var actionbar: ActionBar? = null
 
     open var caption: String
