@@ -9,6 +9,7 @@ import ru.studiq.mcashier.interfaces.IProviderClientListener
 import ru.studiq.mcashier.model.Settings
 import ru.studiq.mcashier.model.classes.network.*
 import ru.studiq.mcashier.model.classes.network.providerclasses.CustomProviderData
+import ru.studiq.mcashier.model.classes.network.providerclasses.ProviderDataProductInfo
 import ru.studiq.mcashier.model.classes.network.providerclasses.ProviderDataUser
 import java.io.Serializable
 
@@ -42,6 +43,7 @@ data class ProviderDataProductDetail (
 ): CustomProviderData() {
     companion object {
     }
+    public var info: ProviderDataProductInfo? = null
 }
 
 fun ProviderDataProductDetail.Companion.load(sender: Context?, params: String, listener: IDataProductDetailActivityListener) {

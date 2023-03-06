@@ -48,9 +48,20 @@ class SalesActivity : CustomCompatActivity(), SalesActionFragment.SalesItemClick
     private var textSubTrademark: TextView? = null
 
     private var scanner: CustomBarcodeScanner? = null
+    private var sales: List<ProviderDataProductDetail> = listOf()
+    private var current: ProviderDataProductDetail? = null
+    private var total: Double = 0.0
+        get(){
+            var value: Double = 0.0
+            sales.forEach({
+                value = value.plus(it.info?.price ?: 0.0)
+            })
+            return value.plus(current?.info?.price ?: 0.0)
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
+
 
     override fun setupActivity() {
         super.setupActivity()
@@ -65,9 +76,7 @@ class SalesActivity : CustomCompatActivity(), SalesActionFragment.SalesItemClick
         textColor = findViewById(R.id.sales_activity_text_color)
         textSize = findViewById(R.id.sales_activity_text_size)
         textPrice = findViewById(R.id.sales_activity_text_price)
-//        textBarcode = findViewById(R.id.sales_activity_text_total)
-//        textDescription = findViewById(R.id.sales_activity_text_total)
-
+        textTotal?.text = ""
 
         this.scanner = when (Settings.Application.deviceType) {
 //            1 -> GoogleBarcodeScanner(this, GoogleBarcodeScannerOptions(Settings.Application.allowManualInputBarcode))
@@ -81,7 +90,6 @@ class SalesActivity : CustomCompatActivity(), SalesActionFragment.SalesItemClick
 
     override fun initialize() {
         super.initialize()
-        textTotal?.text = ""
         textPLU?.text = ""
         textArticle?.text = ""
         textName?.text = ""
@@ -189,7 +197,8 @@ class SalesActivity : CustomCompatActivity(), SalesActionFragment.SalesItemClick
                                             override fun onSuccess(sender: Context?, code: Int, msg: String, data: ProviderDataProductInfo?) {
                                                 super.onSuccess(sender, code, msg, data)
                                                 val obj = data?.let { info ->
-                                                    onProductScan(detail, info)
+                                                    detail.info = info
+                                                    onProductScan(detail)
                                                 } ?: run {
                                                     onActivityError(
                                                         CustomHardwareError(-1, senderContext.getString(R.string.error_unassigned))
@@ -229,16 +238,20 @@ class SalesActivity : CustomCompatActivity(), SalesActionFragment.SalesItemClick
             }
         })
     }
-    private fun onProductScan(product: ProviderDataProductDetail, info: ProviderDataProductInfo) {
+    private fun onProductScan(product: ProviderDataProductDetail) {
         runOnUiThread {
-            textTotal?.text = "XXX XXX XXX,XX"
-            textSubTrademark?.text = info.subTradeMarkName
+            this.current?.let {
+                this.sales.plus(it)
+            }
+            this.current = product
+            textTotal?.text = formatDouble(this.total)
+            textSubTrademark?.text = product.info?.subTradeMarkName ?: ""
             textPLU?.text = product.PLU
-            textArticle?.text = info.article
+            textArticle?.text = product.info?.article ?: ""
             textName?.text = product.caption
             textColor?.text = "${this.getString(R.string.cap_color)}: ${product.ColorID}"
             textSize?.text = "${this.getString(R.string.cap_size)}: ${product.SizeID}"
-            textPrice?.text = formatDouble(info.price)
+            textPrice?.text = product?.info?.let {  formatDouble(it.price) } ?: run { "" }
         }
 
     }
