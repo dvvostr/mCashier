@@ -31,7 +31,7 @@ fun UserListActivity.Companion.load(sender: Context?, listener: ICustomListActiv
     val provider = ProviderClient()
     val id = java.util.UUID.randomUUID().toString()
     var url = Settings.Application.Network.connectionURL
-    val paramValue = "'<elementsList><elementRow StaffTypeID = \"4\"/><elementRow StaffTypeID = \"5\"/></elementsList>'"
+    val paramValue = "<elementsList><elementRow StaffTypeID = \"4\"/><elementRow StaffTypeID = \"5\"/></elementsList>"
     val request = CreateProviderRequest(id, ProviderRequestSystemType.cashrigester, ProviderRequestMethodStatic.none, "", "GetStaffListRS")
     request.body.methodParams = request.body.methodParams.plus(ProviderRequestMethodParam(paramValue))
     try {
@@ -47,17 +47,17 @@ fun UserListActivity.Companion.load(sender: Context?, listener: ICustomListActiv
                     if (header.id == id && header.code >= 0 && data.type == ru.studiq.mcashier.model.classes.network.ProviderDataBodyType.normal.ordinal) {
                         listener.onSuccess(sender, header.code, header.msg, data)
                     } else {
-                        listener.onError(sender, header.code, header.msg, null)
+                        listener.onError(sender, header.code, header.msg)
                     }
                 }
 
                 override fun onError(response: ProviderResponse, header: ProviderDataHeader) {
-                    listener.onError(sender, header.code, header.msg, null)
+                    listener.onError(sender, header.code, header.msg)
                 }
             }
         )
     } catch (ex: Exception) {
-        listener.onError(sender, -1, ex.localizedMessage ?: sender?.getString(R.string.error_unassigned) ?: "", null)
+        listener.onError(sender, -1, ex.localizedMessage ?: sender?.getString(R.string.error_unassigned) ?: "")
     }
 }
 

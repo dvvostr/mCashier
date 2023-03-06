@@ -19,7 +19,7 @@ data class ProviderRequest(
     @field:SerializedName("body") val body: ProviderRequestBody
 ) {}
 data class ProviderRequestHeader(
-    @field:SerializedName("id") val id: String
+    @field:SerializedName("id") var id: String
 ) {}
 data class ProviderRequestBody(
     @field:SerializedName("SystemType") val type: Int,

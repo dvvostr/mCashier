@@ -50,25 +50,21 @@ fun DepartmentListActivity.Companion.load(sender: Context?, listener: ICustomLis
             url,
             Gson().toJson(request),
             object : IProviderClientListener {
-                override fun onSuccess(
-                    response: ProviderResponse,
-                    header: ProviderDataHeader,
-                    data: ProviderDataBody
-                ) {
+                override fun onSuccess(response: ProviderResponse, header: ProviderDataHeader, data: ProviderDataBody) {
                     if (header.id == id && header.code >= 0 && data.type == ru.studiq.mcashier.model.classes.network.ProviderDataBodyType.normal.ordinal) {
                         listener.onSuccess(sender, header.code, header.msg, data)
                     } else {
-                        listener.onError(sender, header.code, header.msg, null)
+                        listener.onError(sender, header.code, header.msg)
                     }
                 }
 
                 override fun onError(response: ProviderResponse, header: ProviderDataHeader) {
-                    listener.onError(sender, header.code, header.msg, null)
+                    listener.onError(sender, header.code, header.msg)
                 }
             }
         )
     } catch (ex: Exception) {
-        listener.onError(sender, -1, ex.localizedMessage ?: sender?.getString(R.string.error_unassigned) ?: "", null)
+        listener.onError(sender, -1, ex.localizedMessage ?: sender?.getString(R.string.error_unassigned) ?: "")
     }
 }
 class DepartmentListActivity : CustomCompatActivity() {
@@ -138,6 +134,7 @@ class DepartmentListActivity : CustomCompatActivity() {
             }
             else -> {
                 val intent = Intent()
+                intent.putExtra(Settings.Extra.action, ProviderDataDepartment.Companion.codeSetAction)
                 intent.putExtra(Settings.Extra.UserObject, item)
                 setResult(RESULT_OK, intent)
                 finish()

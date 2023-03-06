@@ -49,7 +49,7 @@ class ProviderClient {
 
  */
     public fun fetchJSON(url: String, json: String, listener: IProviderClientListener) {
-        println("******* FETCH JSON *******")
+        println("******* FETCH JSON *******\r\n $json")
 //        var client = OkHttpClient()
         var client = OkHttpClient().newBuilder()
             .connectTimeout(10, TimeUnit.SECONDS)

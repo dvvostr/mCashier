@@ -1,12 +1,7 @@
 package ru.studiq.mcashier.model.classes.hw.barcode
 
 import android.content.Context
-import android.util.Log
-import android.widget.Toast
-import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.ActivityResultRegistry
-import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
 import com.google.zxing.client.android.Intents
 import com.journeyapps.barcodescanner.ScanContract
@@ -37,7 +32,7 @@ class SimpleBarcodeScanner: CustomBarcodeScanner {
                         this.onScanListener?.onError(this, CustomHardwareError(-1, "Cancelled due to missing camera permission"))
                     }
                 } else {
-                    this.onScanListener?.onBarcodeRead(this, result.contents)
+                    this.onScanListener?.onBarcodeRead(this, CustomBarcode(result.formatName, result.contents))
                 }
             } //.also { barcodeLauncher =  it }
         }
@@ -46,6 +41,8 @@ class SimpleBarcodeScanner: CustomBarcodeScanner {
 
     override fun scan(listener: IBarcodeReadListener) {
         this.onScanListener = listener
-        barcodeLauncher?.launch(ScanOptions())
+        val options = ScanOptions()
+        options.setTimeout(8000)
+         barcodeLauncher?.launch(options)
     }
 }

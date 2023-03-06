@@ -4,27 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UI.Activities.SalesActivity"
     android:background="@drawable/image_main_bg"
-    >
-
-    <TextView
-        android:id="@+id/barcode_result_view"
-        android:layout_width="match_parent"
-        android:layout_height="20dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:text=""
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    android:onClick="onToolsButtonClicked"
+    tools:context=".UI.Activities.SalesActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout3"
         android:layout_width="0dp"
         android:layout_height="72dp"
-        android:background="@color/background_light"
 
+        android:background="@color/background_light"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -51,6 +40,7 @@
             android:layout_width="wrap_content"
             android:layout_height="62dp"
             android:layout_marginStart="16dp"
+            android:onClick="onActionButtonClicked"
             android:text="Key 1"
             app:cornerRadius="30dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -63,11 +53,131 @@
             android:layout_width="wrap_content"
             android:layout_height="62dp"
             android:layout_marginEnd="16dp"
-            app:cornerRadius="30dp"
             android:text="Key 2"
+            app:cornerRadius="30dp"
             app:layout_constraintBottom_toBottomOf="@+id/sales_button_scan"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/sales_button_scan" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/sales_activity_text_total"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:textAlignment="textEnd"
+            android:textFontWeight="@integer/font_700"
+            android:textSize="38sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/constraintLayout3"
+        app:layout_constraintEnd_toEndOf="@+id/constraintLayout2"
+        app:layout_constraintStart_toStartOf="@+id/constraintLayout2"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout2">
+
+        <TextView
+            android:id="@+id/sales_activity_text_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="TextView"
+            android:textSize="22dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sales_activity_text_plu" />
+
+        <TextView
+            android:id="@+id/sales_activity_text_color"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="24dp"
+            android:text="TextView"
+            app:layout_constraintEnd_toStartOf="@+id/sales_activity_text_size"
+            app:layout_constraintStart_toStartOf="@+id/sales_activity_text_name"
+            app:layout_constraintTop_toBottomOf="@+id/sales_activity_text_name" />
+
+        <TextView
+            android:id="@+id/sales_activity_text_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            app:layout_constraintBottom_toBottomOf="@+id/sales_activity_text_color"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/sales_activity_text_color" />
+
+        <TextView
+            android:id="@+id/sales_activity_text_price"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="TextView"
+            android:textAlignment="textEnd"
+            android:textFontWeight="@integer/font_500"
+            android:textSize="28sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sales_activity_text_color" />
+
+        <TextView
+            android:id="@+id/sales_activity_text_plu"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="TextView"
+            android:textFontWeight="@integer/font_500"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toStartOf="@+id/sales_activity_text_article"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sales_activity_text_subtrademark" />
+
+        <TextView
+            android:id="@+id/sales_activity_text_article"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:textFontWeight="@integer/font_500"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="@+id/sales_activity_text_plu"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/sales_activity_text_plu" />
+
+        <TextView
+            android:id="@+id/sales_activity_text_subtrademark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:textFontWeight="@integer/font_500"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="@+id/sales_activity_text_plu"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

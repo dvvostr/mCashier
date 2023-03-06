@@ -14,6 +14,9 @@
 
 
     <string name="cap_sales">Продажи</string>
+    <string name="cap_color">цвет</string>
+    <string name="cap_size">размер</string>
+
     <string name="cap_underconstruction">В разработке</string>
     <string name="cap_salesreturns">Возвраты</string>
     <string name="cap_reports">Отчеты</string>
@@ -27,6 +30,7 @@
 
     <string name="cap_error">Ошибка</string>
 
+    <string name="err_data_empty">Нет данных</string>
     <string name="error_unassigned">Неизвестная ощибка</string>
     <string name="error_department_not_set">Подразделение не выбрано</string>
     <string name="error_user_not_set">Не выбран пользователь</string>

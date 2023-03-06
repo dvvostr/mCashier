@@ -27,6 +27,7 @@ open class CustomCompatActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         this.setupActivity()
     }
+    open fun initialize() {}
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true

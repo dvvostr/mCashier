@@ -6,4 +6,8 @@ class ProviderDataDepartment (
     @field:SerializedName("DepartmentID") val id: String,
     @field:SerializedName("DepartmentDescription") val caption: String,
     @field:SerializedName("ObjectName") val description: String
-): java.io.Serializable { }
+): java.io.Serializable {
+    companion object {
+        public val codeSetAction = "DEPARTMENT_SET"
+    }
+}

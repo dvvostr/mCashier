@@ -32,7 +32,7 @@ class GoogleBarcodeScanner: CustomBarcodeScanner{
             it.startScan()
             .addOnSuccessListener { barcode: Barcode ->
                 try {
-                    listener.onBarcodeRead(this, barcode.displayValue)
+                    listener.onBarcodeRead(this, CustomBarcode(barcode.valueType.toString(), barcode.displayValue))
                 } catch (ex: Exception) {
                     listener.onError(this, CustomHardwareError(-1, ex.message))
                 }

@@ -5,8 +5,9 @@ import androidx.annotation.NonNull
 import ru.studiq.mcashier.model.classes.hw.CustomHardwareError
 
 
+final class CustomBarcode(val type: String?, val text: String?) {}
 interface IBarcodeReadListener {
-    fun onBarcodeRead (sender: CustomBarcodeScanner, barcode: String?) {
+    fun onBarcodeRead (sender: CustomBarcodeScanner, barcode: CustomBarcode?) {
     }
     fun onCancel (sender: CustomBarcodeScanner) {
     }

@@ -1,5 +1,8 @@
 package ru.studiq.mcashier.UI.Activities
 
+import IDataProductDetailActivityListener
+import ProviderDataProductDetail
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -11,47 +14,40 @@ import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.MenuCompat
-import com.google.zxing.client.android.Intents
-import com.journeyapps.barcodescanner.ScanContract
-import com.journeyapps.barcodescanner.ScanIntentResult
-import com.journeyapps.barcodescanner.ScanOptions
+
+import load
 import ru.studiq.mcashier.R
 import ru.studiq.mcashier.UI.Activities.security.RegisterActivity
-import ru.studiq.mcashier.UI.Activities.tools.CustomZXingScannerActivity
+import ru.studiq.mcashier.UI.Fragments.SalesActionFragment
 import ru.studiq.mcashier.common.Common
+import ru.studiq.mcashier.common.formatDouble
 import ru.studiq.mcashier.interfaces.ICustomListActivityListener
 import ru.studiq.mcashier.model.Settings
 import ru.studiq.mcashier.model.classes.activities.common.CustomCompatActivity
 import ru.studiq.mcashier.model.classes.hw.CustomHardwareError
 import ru.studiq.mcashier.model.classes.hw.barcode.*
 import ru.studiq.mcashier.model.classes.network.ProviderDataBody
+import ru.studiq.mcashier.model.classes.network.providerclasses.IDataProductInfoActivityListener
 import ru.studiq.mcashier.model.classes.network.providerclasses.ProviderDataDepartment
+import ru.studiq.mcashier.model.classes.network.providerclasses.ProviderDataProductInfo
+import ru.studiq.mcashier.model.classes.network.providerclasses.load
 import java.io.Serializable
+import java.text.DecimalFormat
 
-class SalesActivity : CustomCompatActivity() {
+class SalesActivity : CustomCompatActivity(), SalesActionFragment.SalesItemClickListener {
     private var allowManualInput: Boolean = Settings.Application.allowManualInputBarcode
-    private var barcodeResultView: TextView? = null
+    private var textTotal: TextView? = null
+    private var textPLU: TextView? = null
+    private var textBarcode: TextView? = null
+    private var textArticle: TextView? = null
+    private var textName: TextView? = null
+    private var textDescription: TextView? = null
+    private var textColor: TextView? = null
+    private var textSize: TextView? = null
+    private var textPrice: TextView? = null
+    private var textSubTrademark: TextView? = null
 
     private var scanner: CustomBarcodeScanner? = null
-
-//    private val barcodeLauncher = registerForActivityResult<ScanOptions, ScanIntentResult>(
-//        ScanContract()
-//    ) { result: ScanIntentResult ->
-//        if (result.contents == null) {
-//            val originalIntent = result.originalIntent
-//            if (originalIntent == null) {
-//                Log.d("MainActivity", "Cancelled scan")
-//                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show()
-//            } else if (originalIntent.hasExtra(Intents.Scan.MISSING_CAMERA_PERMISSION)) {
-//                Log.d("MainActivity", "Cancelled scan due to missing camera permission")
-//                Toast.makeText(this, "Cancelled due to missing camera permission", Toast.LENGTH_LONG).show()
-//            }
-//        } else {
-//            Log.d("MainActivity", "Scanned")
-//            Toast.makeText(this, "Scanned: " + result.contents, Toast.LENGTH_LONG).show()
-//        }
-//    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -61,7 +57,18 @@ class SalesActivity : CustomCompatActivity() {
         setContentView(R.layout.activity_sales)
         supportActionBar?.title = getString(R.string.cap_sales).toUpperCase()
         supportActionBar?.subtitle = Settings.Application.currentDepartment?.caption
-        barcodeResultView = findViewById(R.id.barcode_result_view)
+        textTotal = findViewById(R.id.sales_activity_text_total)
+        textSubTrademark = findViewById(R.id.sales_activity_text_subtrademark)
+        textPLU = findViewById(R.id.sales_activity_text_plu)
+        textArticle = findViewById(R.id.sales_activity_text_article)
+        textName = findViewById(R.id.sales_activity_text_name)
+        textColor = findViewById(R.id.sales_activity_text_color)
+        textSize = findViewById(R.id.sales_activity_text_size)
+        textPrice = findViewById(R.id.sales_activity_text_price)
+//        textBarcode = findViewById(R.id.sales_activity_text_total)
+//        textDescription = findViewById(R.id.sales_activity_text_total)
+
+
         this.scanner = when (Settings.Application.deviceType) {
 //            1 -> GoogleBarcodeScanner(this, GoogleBarcodeScannerOptions(Settings.Application.allowManualInputBarcode))
             1 -> SimpleBarcodeScanner(this, SimpleBarcodeScannerOptions())
@@ -69,14 +76,20 @@ class SalesActivity : CustomCompatActivity() {
             else -> null
         }
         this.isLockBackNavigation = true
-//        this.onBackPressedDispatcher.addCallback(this){
-//            if (!isLockBackNavigation)
-//                finish()
-////            else
-////                isLockBackNavigation = false
-//        }
+        this.initialize()
     }
 
+    override fun initialize() {
+        super.initialize()
+        textTotal?.text = ""
+        textPLU?.text = ""
+        textArticle?.text = ""
+        textName?.text = ""
+        textColor?.text = ""
+        textSize?.text = ""
+        textPrice?.text = ""
+        textSubTrademark?.text = ""
+    }
 //    override fun onBackPressed() {
 //        if (!isLockBackNavigation)
 //            super.onBackPressed()
@@ -116,20 +129,20 @@ class SalesActivity : CustomCompatActivity() {
                     Common.WaitDialog.dismiss()
                 }
             }
-            override fun onError(sender: Context?, code: Int, msg: String, data: Serializable?) {
+            override fun onError(sender: Context?, code: Int, msg: String) {
                 Common.WaitDialog.dismiss()
                 (sender as? RegisterActivity)?.let {
                     runOnUiThread {
                         Common.AlertDialog.show(it, getString(R.string.cap_error), msg, true)
                     }
                 }
-                super.onError(sender, code, msg, data)
+                super.onError(sender, code, msg)
             }
         })
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         Log.d("RESULT", "Code ${requestCode}")
-        if (resultCode == RESULT_OK && data != null) {
+        if (resultCode == RESULT_OK && data != null && data.getStringExtra(Settings.Extra.action) ?: "" == ProviderDataDepartment.Companion.codeSetAction) {
             val item: ProviderDataDepartment? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 data.getSerializableExtra(Settings.Extra.UserObject, ProviderDataDepartment::class.java) as? ProviderDataDepartment
             } else {
@@ -148,30 +161,92 @@ class SalesActivity : CustomCompatActivity() {
         Log.d("RESULT", "Code ${requestCode}")
     }
 
+    fun onActionButtonClicked(view: View) {
+        val addPhotoBottomDialogFragment = SalesActionFragment.newInstance()
+        addPhotoBottomDialogFragment.show(
+            supportFragmentManager,
+            SalesActionFragment.TAG
+        )
+    }
+    override fun onItemClick(item: String?) {
+        Toast.makeText(this, "Selected action item is $item", Toast.LENGTH_LONG).show()
+    }
+    fun onToolsButtonClicked(view: View) {
+
+    }
     // ***** SCANNER ***** //
     fun onScanButtonClicked(view: View) {
-        val options = ScanOptions()
-////            .setOrientationLocked(false)
-////            .setTimeout(8000)
-//            .setCaptureActivity(
-//                CustomZXingScannerActivity::class.java
-//            )
-//
-//        barcodeLauncher.launch(options)
+        val senderContext = this
         scanner?.scan (object : IBarcodeReadListener {
-            override fun onBarcodeRead(sender: CustomBarcodeScanner, barcode: String?) {
-                barcodeResultView?.text = barcode ?: "NONE"
+            override fun onBarcodeRead(sender: CustomBarcodeScanner, barcode: CustomBarcode?) {
+                val params = barcode?.text ?: ""
+                if (params.length > 0) {
+                    Common.WaitDialog.show(senderContext, false)
+                    ProviderDataProductDetail.load(senderContext, params, object : IDataProductDetailActivityListener {
+                            override fun onSuccess(sender: Context?, code: Int, msg: String, data: ProviderDataProductDetail?) {
+                                val obj = data?.let { detail ->
+                                    ProviderDataProductInfo.load(sender, detail.barcode, object : IDataProductInfoActivityListener {
+                                            override fun onSuccess(sender: Context?, code: Int, msg: String, data: ProviderDataProductInfo?) {
+                                                super.onSuccess(sender, code, msg, data)
+                                                val obj = data?.let { info ->
+                                                    onProductScan(detail, info)
+                                                } ?: run {
+                                                    onActivityError(
+                                                        CustomHardwareError(-1, senderContext.getString(R.string.error_unassigned))
+                                                    )
+                                                }
+                                                Common.WaitDialog.dismiss()
+                                            }
+                                            override fun onEmpty(sender: Context?) {
+                                                super.onEmpty(sender)
+                                                Common.WaitDialog.dismiss()
+                                                onActivityError(CustomHardwareError(code, senderContext.getString(R.string.err_data_empty))
+                                                )
+                                            }
+                                            override fun onError(sender: Context?, code: Int, msg: String) {
+                                                Common.WaitDialog.dismiss()
+                                                onActivityError(CustomHardwareError( code, msg ?: senderContext.getString(R.string.error_unassigned)))
+                                            }
+                                        })
+                                } ?: run {
+                                    Common.WaitDialog.dismiss()
+                                    onActivityError(CustomHardwareError(-1, senderContext.getString(R.string.error_unassigned)))
+                                }
+                            }
+                            override fun onError(sender: Context?, code: Int, msg: String) {
+                                Common.WaitDialog.dismiss()
+                                onActivityError(CustomHardwareError(code, msg ?: senderContext.getString(R.string.error_unassigned)))
+                            }
+                        })
+                } else
+                    Log.d("LOG", "ERROR")
             }
             override fun onCancel(sender: CustomBarcodeScanner) {
-                barcodeResultView?.text = "CANCEL"
+                Log.d("LOG", "CANCEL")
             }
             override fun onError(sender: CustomBarcodeScanner, error: CustomHardwareError?) {
-                barcodeResultView?.text = "${(error?.code ?: -1).toString()} : ${error?.text ?: "UNKNOWN"}"
+                onActivityError(CustomHardwareError(error?.code ?: -1, error?.text ?: senderContext.getString(R.string.error_unassigned)))
             }
         })
     }
+    private fun onProductScan(product: ProviderDataProductDetail, info: ProviderDataProductInfo) {
+        runOnUiThread {
+            textTotal?.text = "XXX XXX XXX,XX"
+            textSubTrademark?.text = info.subTradeMarkName
+            textPLU?.text = product.PLU
+            textArticle?.text = info.article
+            textName?.text = product.caption
+            textColor?.text = "${this.getString(R.string.cap_color)}: ${product.ColorID}"
+            textSize?.text = "${this.getString(R.string.cap_size)}: ${product.SizeID}"
+            textPrice?.text = formatDouble(info.price)
+        }
 
-
+    }
+    private fun onActivityError(error: CustomHardwareError) {
+        runOnUiThread {
+            Common.AlertDialog.show(this, this.getString(R.string.cap_error), "${error.code.toString()} - ${error.text}")
+        }
+    }
     override fun onSaveInstanceState(savedInstanceState: Bundle) {
         savedInstanceState.putBoolean(KEY_ALLOW_MANUAL_INPUT, allowManualInput)
         super.onSaveInstanceState(savedInstanceState)

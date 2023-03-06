@@ -169,6 +169,7 @@ public final class Settings {
     }
     public final class Extra {
         companion object {
+            val action: String = "EXTRA_ACTION"
             val UserObject: String = "EXTRA_USER_OBJECT"
             public fun initialize() {
             }

@@ -75,14 +75,14 @@ class RegisterActivity : AppCompatActivity() {
                         Common.WaitDialog.dismiss()
                     }
                 }
-                override fun onError(sender: Context?, code: Int, msg: String, data: Serializable?) {
+                override fun onError(sender: Context?, code: Int, msg: String) {
                     Common.WaitDialog.dismiss()
                     (sender as? RegisterActivity)?.let {
                         runOnUiThread {
                             Common.AlertDialog.show(it, getString(R.string.cap_error), msg, true)
                         }
                     }
-                    super.onError(sender, code, msg, data)
+                    super.onError(sender, code, msg)
                 }
             })
         }
@@ -106,14 +106,14 @@ class RegisterActivity : AppCompatActivity() {
                 }
             }
 
-            override fun onError(sender: Context?, code: Int, msg: String, data: Serializable?) {
+            override fun onError(sender: Context?, code: Int, msg: String) {
                 Common.WaitDialog.dismiss()
                 (sender as? RegisterActivity)?.let {
                     runOnUiThread {
                         Common.AlertDialog.show(it, getString(R.string.cap_error), msg, true)
                     }
                 }
-                super.onError(sender, code, msg, data)
+                super.onError(sender, code, msg)
             }
         })
     }

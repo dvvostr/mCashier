@@ -3,12 +3,14 @@ package ru.studiq.mcashier.common
 import android.app.Activity
 import android.content.Context
 import com.google.gson.Gson
-import java.io.IOException
 import ru.studiq.mcashier.R
 import ru.studiq.mcashier.UI.Classes.CustomAlertDialog
-import ru.studiq.mcashier.model.SettingData
 import ru.studiq.mcashier.UI.Classes.CustomWaitDialog
+import ru.studiq.mcashier.model.SettingData
 import ru.studiq.mcashier.model.classes.network.providerclasses.ProviderDataMainMenuCard
+import java.io.IOException
+import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
 
 typealias JSONText = String
 
@@ -71,7 +73,7 @@ object Common {
     object AlertDialog {
         private var dialog: CustomAlertDialog? = null
 
-        fun show(activity: Activity, caption: String, desc: String, canCancel: Boolean = false) {
+        fun show(activity: Activity, caption: String, desc: String, canCancel: Boolean = true) {
             if (dialog != null) {
                 dialog?.dismiss()
             }
@@ -95,5 +97,16 @@ object Common {
         fun dismiss() {
             WaitDialog.waitDialog?.dismiss()
         }
+    }
+}
+public fun formatDouble(value: Double?): String {
+    value?.let {
+        val decimalFormatSymbols = DecimalFormatSymbols()
+        decimalFormatSymbols.decimalSeparator = '.'
+        decimalFormatSymbols.groupingSeparator = ','
+        val decimalFormat = DecimalFormat("#,##0.00", decimalFormatSymbols)
+        return decimalFormat.format(value)
+    } ?: run {
+        return ""
     }
 }

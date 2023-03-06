@@ -12,5 +12,6 @@ enum class CustomListActivityResult(val code: Int, val msg: String? = "") {
 
 interface ICustomListActivityListener {
     fun onSuccess(sender: Context?, code: Int, msg: String, data: Serializable?) {}
-    fun onError(sender: Context?, code: Int, msg: String, data: Serializable?) {}
+    fun onEmpty(sender: Context?) {}
+    fun onError(sender: Context?, code: Int, msg: String) {}
 }
