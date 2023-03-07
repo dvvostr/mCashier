@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="8dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginEnd="8dp"
+    android:layout_marginBottom="8dp"
+    android:background="@drawable/control_tab_rounded"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp">
+
+    <TextView
+        android:id="@+id/activity_cart_row_PLU"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toStartOf="@+id/activity_cart_row_article"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/activity_cart_row_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="@+id/activity_cart_row_article"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/activity_cart_row_PLU"
+        app:layout_constraintTop_toBottomOf="@+id/activity_cart_row_desc" />
+
+    <TextView
+        android:id="@+id/activity_cart_row_article"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="TextView"
+        app:layout_constraintBottom_toBottomOf="@+id/activity_cart_row_PLU"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/activity_cart_row_PLU" />
+
+    <TextView
+        android:id="@+id/activity_cart_row_color"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toStartOf="@+id/activity_cart_row_size"
+        app:layout_constraintStart_toStartOf="@+id/activity_cart_row_name"
+        app:layout_constraintTop_toBottomOf="@+id/activity_cart_row_name" />
+
+    <TextView
+        android:id="@+id/activity_cart_row_size"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        app:layout_constraintBottom_toBottomOf="@+id/activity_cart_row_color"
+        app:layout_constraintEnd_toEndOf="@+id/activity_cart_row_name"
+        app:layout_constraintTop_toTopOf="@+id/activity_cart_row_color" />
+
+    <TextView
+        android:id="@+id/activity_cart_row_price"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="TextView"
+        android:textSize="18sp"
+        android:textFontWeight="@integer/font_500"
+        android:textAlignment="textEnd"
+        app:layout_constraintBottom_toBottomOf="@+id/activity_cart_row_qty"
+        app:layout_constraintEnd_toEndOf="@+id/activity_cart_row_size"
+        app:layout_constraintStart_toEndOf="@+id/activity_cart_row_qty"
+        app:layout_constraintTop_toTopOf="@+id/activity_cart_row_qty" />
+
+    <TextView
+        android:id="@+id/activity_cart_row_qty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="TextView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/activity_cart_row_color"
+        app:layout_constraintTop_toBottomOf="@+id/activity_cart_row_color" />
+
+    <TextView
+        android:id="@+id/activity_cart_row_desc"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="TextView"
+        android:textSize="18sp"
+        android:textFontWeight="@integer/font_400"
+        android:textAlignment="textStart"
+        app:layout_constraintEnd_toEndOf="@+id/activity_cart_row_article"
+        app:layout_constraintStart_toStartOf="@+id/activity_cart_row_PLU"
+        app:layout_constraintTop_toBottomOf="@+id/activity_cart_row_PLU" />
+</androidx.constraintlayout.widget.ConstraintLayout>

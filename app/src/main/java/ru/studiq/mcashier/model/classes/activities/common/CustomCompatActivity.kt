@@ -69,6 +69,7 @@ open class CustomCompatActivity : AppCompatActivity() {
             supportActionBar?.title = value.uppercase()
         }
     }
+    open fun invalidate() {}
     override fun getSupportParentActivityIntent(): Intent? {
         return this.handleGetParentActivityIntent() ?: super.getSupportParentActivityIntent()
     }

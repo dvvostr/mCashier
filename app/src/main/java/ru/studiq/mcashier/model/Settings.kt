@@ -162,6 +162,7 @@ public final class Settings {
             val ParentActivity: String = "PARENT_ACTIVITY"
             val TargetActivity: String = "TARGET_ACTIVITY"
             val ActivityCaption: String = "CAPTION_ACTIVITY"
+            val ListJSON: String = "LIST_DATA_JSON"
             val ListItems: String = "LIST_DATA_ITEMS"
             public fun initialize() {
             }

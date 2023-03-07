@@ -18,6 +18,20 @@ interface IDataProductDetailActivityListener {
     fun onEmpty(sender: Context?) {}
     fun onError(sender: Context?, code: Int, msg: String) {}
 }
+data class ProviderDataProductDetailItems (
+    @field:SerializedName("items") var items: Array<ProviderDataProductDetail> = arrayOf()
+): CustomProviderData() {
+    companion object {
+    }
+    public var total: Double = 0.0
+        get(){
+        var out: Double = 0.0
+        items.forEach { item ->
+            out = out.plus(item.info?.price ?: 0.0)
+        }
+        return out
+    }
+}
 data class ProviderDataProductDetail (
     @field:SerializedName("BarCode") val barcode: String,
     @field:SerializedName("PLU") val PLU: String,
@@ -39,11 +53,11 @@ data class ProviderDataProductDetail (
     @field:SerializedName("SeasonID") val SeasonID: String = "",
     @field:SerializedName("ColorID") val ColorID: String = "",
     @field:SerializedName("SizeID") val SizeID: String = "",
-    @field:SerializedName("CarryOver") val CarryOver: String = ""
+    @field:SerializedName("CarryOver") val CarryOver: String = "",
+    @field:SerializedName("Info") var info: ProviderDataProductInfo? = null
 ): CustomProviderData() {
     companion object {
     }
-    public var info: ProviderDataProductInfo? = null
 }
 
 fun ProviderDataProductDetail.Companion.load(sender: Context?, params: String, listener: IDataProductDetailActivityListener) {

@@ -18,9 +18,11 @@
     <string name="cap_username">User name</string>
     <string name="cap_departmentname">Department</string>
     <string name="cap_departments">Departments</string>
+    <string name="cap_cart">Cart</string>
     <string name="cap_department_select">Select sales departments</string>
     <string name="cap_color">color</string>
     <string name="cap_size">size</string>
+    <string name="cap_pc">pc</string>
 
     <string name="cap_sales">Sales</string>
     <string name="cap_underconstruction">Under construction</string>

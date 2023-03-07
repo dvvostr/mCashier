@@ -2,6 +2,7 @@ package ru.studiq.mcashier.UI.Activities
 
 import IDataProductDetailActivityListener
 import ProviderDataProductDetail
+import ProviderDataProductDetailItems
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
@@ -11,10 +12,15 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewTreeObserver.OnGlobalLayoutListener
+import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.MenuCompat
-
+import com.google.android.material.badge.BadgeDrawable
+import com.google.android.material.badge.BadgeUtils
+import com.google.android.material.button.MaterialButton
+import com.google.gson.Gson
 import load
 import ru.studiq.mcashier.R
 import ru.studiq.mcashier.UI.Activities.security.RegisterActivity
@@ -32,10 +38,13 @@ import ru.studiq.mcashier.model.classes.network.providerclasses.ProviderDataDepa
 import ru.studiq.mcashier.model.classes.network.providerclasses.ProviderDataProductInfo
 import ru.studiq.mcashier.model.classes.network.providerclasses.load
 import java.io.Serializable
-import java.text.DecimalFormat
+
 
 class SalesActivity : CustomCompatActivity(), SalesActionFragment.SalesItemClickListener {
     private var allowManualInput: Boolean = Settings.Application.allowManualInputBarcode
+
+    private var buttonKey1: MaterialButton? = null
+    private var buttonKey2: MaterialButton? = null
     private var textTotal: TextView? = null
     private var textPLU: TextView? = null
     private var textBarcode: TextView? = null
@@ -46,37 +55,45 @@ class SalesActivity : CustomCompatActivity(), SalesActionFragment.SalesItemClick
     private var textSize: TextView? = null
     private var textPrice: TextView? = null
     private var textSubTrademark: TextView? = null
+    private var badgeDrawable: BadgeDrawable? = null
 
     private var scanner: CustomBarcodeScanner? = null
-    private var sales: List<ProviderDataProductDetail> = listOf()
+    private var sales: ProviderDataProductDetailItems = ProviderDataProductDetailItems()
     private var current: ProviderDataProductDetail? = null
+        get() {
+            return sales.items.last()
+        }
     private var total: Double = 0.0
         get(){
             var value: Double = 0.0
-            sales.forEach({
+            sales.items.forEach({
                 value = value.plus(it.info?.price ?: 0.0)
             })
-            return value.plus(current?.info?.price ?: 0.0)
+            return value
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
-
-
+    @SuppressLint("MissingInflatedId")
     override fun setupActivity() {
         super.setupActivity()
         setContentView(R.layout.activity_sales)
         supportActionBar?.title = getString(R.string.cap_sales).toUpperCase()
         supportActionBar?.subtitle = Settings.Application.currentDepartment?.caption
         textTotal = findViewById(R.id.sales_activity_text_total)
-        textSubTrademark = findViewById(R.id.sales_activity_text_subtrademark)
+        textSubTrademark = findViewById(ru.studiq.mcashier.R.id.sales_activity_text_subtrademark)
         textPLU = findViewById(R.id.sales_activity_text_plu)
         textArticle = findViewById(R.id.sales_activity_text_article)
         textName = findViewById(R.id.sales_activity_text_name)
         textColor = findViewById(R.id.sales_activity_text_color)
         textSize = findViewById(R.id.sales_activity_text_size)
         textPrice = findViewById(R.id.sales_activity_text_price)
-        textTotal?.text = ""
+
+//        buttonKey1 = findViewById(R.id.sales_activity_button_key1)
+//        buttonKey2 = findViewById(R.id.sales_activity_button_key2)
+
+        buttonKey1 = findViewById<MaterialButton>(R.id.sales_activity_button_key1)
+        buttonKey2 = findViewById<MaterialButton>(R.id.sales_activity_button_key2)
 
         this.scanner = when (Settings.Application.deviceType) {
 //            1 -> GoogleBarcodeScanner(this, GoogleBarcodeScannerOptions(Settings.Application.allowManualInputBarcode))
@@ -85,6 +102,23 @@ class SalesActivity : CustomCompatActivity(), SalesActionFragment.SalesItemClick
             else -> null
         }
         this.isLockBackNavigation = true
+        buttonKey2?.getViewTreeObserver()?.addOnGlobalLayoutListener(object : OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                badgeDrawable = BadgeDrawable.create(this@SalesActivity)
+                badgeDrawable?.number = sales.items.size
+                badgeDrawable?.setHorizontalOffset(15)
+                badgeDrawable?.setVerticalOffset(20)
+                badgeDrawable?.setVisible(sales.items.size > 0)
+//                badgeDrawable?.isVisible = (sales.size > 0 || current != null)
+
+                buttonKey2?.let { button ->
+                    badgeDrawable?.let { badge ->
+                        BadgeUtils.attachBadgeDrawable(badge, button, findViewById(R.id.sales_activity_button_frame2));
+                    }
+                    button.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                }
+            }
+        })
         this.initialize()
     }
 
@@ -180,7 +214,12 @@ class SalesActivity : CustomCompatActivity(), SalesActionFragment.SalesItemClick
         Toast.makeText(this, "Selected action item is $item", Toast.LENGTH_LONG).show()
     }
     fun onToolsButtonClicked(view: View) {
-
+        val intent = Intent(this, CartActivity::class.java).apply {
+            putExtra(Settings.Activities.ParentActivity, SalesActivity::class.java.name)
+            putExtra(Settings.Activities.ActivityCaption, getString(R.string.cap_cart))
+            putExtra(Settings.Activities.ListJSON, Gson().toJson(sales))
+        }
+        startActivityForResult(intent, CartActivity.CART_ACTIVITY_REQUEST_CODE)
     }
     // ***** SCANNER ***** //
     fun onScanButtonClicked(view: View) {
@@ -240,11 +279,10 @@ class SalesActivity : CustomCompatActivity(), SalesActionFragment.SalesItemClick
     }
     private fun onProductScan(product: ProviderDataProductDetail) {
         runOnUiThread {
-            this.current?.let {
-                this.sales.plus(it)
-            }
-            this.current = product
-            textTotal?.text = formatDouble(this.total)
+            sales.items = sales.items.plus(product)
+            textTotal?.text = if (total > 0) formatDouble(this.total) else ""
+            badgeDrawable?.isVisible = sales.items.size > 0
+            badgeDrawable?.number = sales.items.size
             textSubTrademark?.text = product.info?.subTradeMarkName ?: ""
             textPLU?.text = product.PLU
             textArticle?.text = product.info?.article ?: ""
@@ -253,7 +291,6 @@ class SalesActivity : CustomCompatActivity(), SalesActionFragment.SalesItemClick
             textSize?.text = "${this.getString(R.string.cap_size)}: ${product.SizeID}"
             textPrice?.text = product?.info?.let {  formatDouble(it.price) } ?: run { "" }
         }
-
     }
     private fun onActivityError(error: CustomHardwareError) {
         runOnUiThread {
