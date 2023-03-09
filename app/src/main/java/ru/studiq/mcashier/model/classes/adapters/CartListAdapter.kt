@@ -10,7 +10,7 @@ import ru.studiq.mcashier.R
 import ru.studiq.mcashier.common.formatDouble
 import ru.studiq.mcashier.model.classes.activities.common.CustomCompatActivity
 
-class CartListAdapter(private val context: CustomCompatActivity, private val list: Array<ProviderDataProductDetail>) :
+class CartListAdapter(private val context: CustomCompatActivity, private val list: MutableList<ProviderDataProductDetail>) :
     RecyclerView.Adapter<ItemViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
@@ -28,7 +28,10 @@ class CartListAdapter(private val context: CustomCompatActivity, private val lis
         holder.textQty.text = "1 ${context.getString(R.string.cap_pc)}."
         holder.textPrice.text = formatDouble(list[position].info?.price) ?: ""
     }
-
+    fun removeAt(position: Int) {
+        list.removeAt(position)
+        notifyItemRemoved(position)
+    }
     override fun getItemCount() = list.size
 }
 

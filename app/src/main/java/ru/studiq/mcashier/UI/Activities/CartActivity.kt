@@ -1,8 +1,12 @@
 package ru.studiq.mcashier.UI.Activities
 
+import ProviderDataProductDetail
 import ProviderDataProductDetailItems
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Rect
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -12,13 +16,16 @@ import android.util.TypedValue
 import android.widget.TextView
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import ru.studiq.mcashier.R
 import ru.studiq.mcashier.common.formatDouble
 import ru.studiq.mcashier.model.Settings
 import ru.studiq.mcashier.model.classes.activities.common.CustomCompatActivity
 import ru.studiq.mcashier.model.classes.adapters.CartListAdapter
+import ru.studiq.mcashier.model.classes.adapters.CartSwipeToDeleteCallback
 import ru.studiq.mcashier.model.classes.network.providerclasses.ProviderDataDepartment
+import kotlin.math.abs
 import kotlin.math.roundToInt
 
 class CartActivity : CustomCompatActivity() {
@@ -42,22 +49,29 @@ class CartActivity : CustomCompatActivity() {
         recyclerView = findViewById(R.id.cart_activity_recyclerview)
         items = Gson().fromJson(intent.getStringExtra(Settings.Activities.ListJSON), ProviderDataProductDetailItems::class.java)
 
-        val displayMetrics: DisplayMetrics = resources.displayMetrics
-        val height = (displayMetrics.heightPixels / displayMetrics.density).toInt().dp
-        val width = (displayMetrics.widthPixels / displayMetrics.density).toInt().dp
-
-        val dropIcon = resources.getDrawable(R.drawable.icon_trashbin, null)
-        val dropColor = resources.getColor(android.R.color.holo_red_light)
-
         textTotal?.text = formatDouble(items.total)
         val adapter = items?.items?.let { CartListAdapter(this, it) }
         recyclerView?.adapter = adapter
 
-        invalidate()
-    }
+        val swipeHandler = object : CartSwipeToDeleteCallback(this) {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val adapter = recyclerView?.adapter as CartListAdapter
+                adapter.removeAt(viewHolder.adapterPosition)
+                invalidate()
+            }
+        }
+        val itemTouchHelper = ItemTouchHelper(swipeHandler)
+        itemTouchHelper.attachToRecyclerView(recyclerView)
 
+    }
+    override fun onBackPressed() {
+        intent.putExtra(Settings.Extra.CartObject, Gson().toJson(items))
+        setResult(RESULT_OK, intent)
+        super.onBackPressed()
+    }
     override fun invalidate() {
         super.invalidate()
+        textTotal?.text = formatDouble(items.total)
     }
     private val Int.dp
         get() = TypedValue.applyDimension(
@@ -65,3 +79,7 @@ class CartActivity : CustomCompatActivity() {
             toFloat(), resources.displayMetrics
         ).roundToInt()
 }
+/*
+            intent.putExtra(Settings.Extra.UserObject, user)
+            setResult(RESULT_OK, intent)
+ */

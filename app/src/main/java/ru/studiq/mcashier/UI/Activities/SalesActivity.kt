@@ -122,6 +122,12 @@ class SalesActivity : CustomCompatActivity(), SalesActionFragment.SalesItemClick
         this.initialize()
     }
 
+    override fun invalidate() {
+        super.invalidate()
+        textTotal?.text = if (total > 0) formatDouble(this.total) else ""
+        badgeDrawable?.number = sales.items.size
+        badgeDrawable?.isVisible = sales.items.size > 0
+    }
     override fun initialize() {
         super.initialize()
         textPLU?.text = ""
@@ -132,10 +138,9 @@ class SalesActivity : CustomCompatActivity(), SalesActionFragment.SalesItemClick
         textPrice?.text = ""
         textSubTrademark?.text = ""
     }
-//    override fun onBackPressed() {
-//        if (!isLockBackNavigation)
-//            super.onBackPressed()
-//    }
+    override fun onBackPressed() {
+        super.onBackPressed()
+    }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_sales, menu)
         if (menu != null) {
@@ -185,13 +190,21 @@ class SalesActivity : CustomCompatActivity(), SalesActionFragment.SalesItemClick
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         Log.d("RESULT", "Code ${requestCode}")
         if (resultCode == RESULT_OK && data != null && data.getStringExtra(Settings.Extra.action) ?: "" == ProviderDataDepartment.Companion.codeSetAction) {
-            val item: ProviderDataDepartment? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                data.getSerializableExtra(Settings.Extra.UserObject, ProviderDataDepartment::class.java) as? ProviderDataDepartment
-            } else {
-                data.getSerializableExtra(Settings.Extra.UserObject) as? ProviderDataDepartment
-            }
+            val item: ProviderDataDepartment? =
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    data.getSerializableExtra(
+                        Settings.Extra.UserObject,
+                        ProviderDataDepartment::class.java
+                    ) as? ProviderDataDepartment
+                } else {
+                    data.getSerializableExtra(Settings.Extra.UserObject) as? ProviderDataDepartment
+                }
             Settings.Application.currentDepartment = item
             supportActionBar?.subtitle = Settings.Application.currentDepartment?.caption ?: ""
+        } else if (resultCode == RESULT_OK && requestCode == CartActivity.Companion.CART_ACTIVITY_REQUEST_CODE) {
+            initialize()
+            sales = Gson().fromJson(data?.getStringExtra(Settings.Extra.CartObject), ProviderDataProductDetailItems::class.java)
+            invalidate()
 
         } else {
             // не удалось получить результат
@@ -279,10 +292,7 @@ class SalesActivity : CustomCompatActivity(), SalesActionFragment.SalesItemClick
     }
     private fun onProductScan(product: ProviderDataProductDetail) {
         runOnUiThread {
-            sales.items = sales.items.plus(product)
-            textTotal?.text = if (total > 0) formatDouble(this.total) else ""
-            badgeDrawable?.isVisible = sales.items.size > 0
-            badgeDrawable?.number = sales.items.size
+            sales.items = sales.items.plus(product) as MutableList<ProviderDataProductDetail>
             textSubTrademark?.text = product.info?.subTradeMarkName ?: ""
             textPLU?.text = product.PLU
             textArticle?.text = product.info?.article ?: ""
@@ -290,6 +300,7 @@ class SalesActivity : CustomCompatActivity(), SalesActionFragment.SalesItemClick
             textColor?.text = "${this.getString(R.string.cap_color)}: ${product.ColorID}"
             textSize?.text = "${this.getString(R.string.cap_size)}: ${product.SizeID}"
             textPrice?.text = product?.info?.let {  formatDouble(it.price) } ?: run { "" }
+            invalidate()
         }
     }
     private fun onActivityError(error: CustomHardwareError) {

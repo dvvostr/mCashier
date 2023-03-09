@@ -22,6 +22,7 @@
     <color name="text_gray">#494949AA</color>
     <color name="text_disabled">#24242482</color>
     <color name="brand_color">#E74E0F</color>
+    <color name="dangerous">#F44336</color>
     <color name="action_run">#8AAD8A</color>
     <color name="mt_button">#636363</color>
 

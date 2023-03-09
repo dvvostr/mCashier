@@ -13,6 +13,7 @@ open class CustomCompatActivity : AppCompatActivity() {
     public var parentActivityName: String = ""
     public var targetActivityName: String = ""
     public var isLockBackNavigation: Boolean = false
+    public var activity: CustomCompatActivity = this
     private var actionbar: ActionBar? = null
 
     open var caption: String
@@ -51,6 +52,7 @@ open class CustomCompatActivity : AppCompatActivity() {
     }
 
     open fun setupActivity() {
+        activity = this
         this.actionbar = this.supportActionBar
         actionbar?.setDisplayHomeAsUpEnabled(true)
         actionbar?.setHomeAsUpIndicator(R.drawable.icon_chevron_left);
@@ -69,7 +71,9 @@ open class CustomCompatActivity : AppCompatActivity() {
             supportActionBar?.title = value.uppercase()
         }
     }
-    open fun invalidate() {}
+    open fun invalidate() {
+
+    }
     override fun getSupportParentActivityIntent(): Intent? {
         return this.handleGetParentActivityIntent() ?: super.getSupportParentActivityIntent()
     }

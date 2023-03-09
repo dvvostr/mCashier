@@ -19,7 +19,7 @@ interface IDataProductDetailActivityListener {
     fun onError(sender: Context?, code: Int, msg: String) {}
 }
 data class ProviderDataProductDetailItems (
-    @field:SerializedName("items") var items: Array<ProviderDataProductDetail> = arrayOf()
+    @field:SerializedName("items") var items: MutableList<ProviderDataProductDetail> = arrayListOf()
 ): CustomProviderData() {
     companion object {
     }
