@@ -13,7 +13,9 @@ import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
 import android.util.TypedValue
+import android.view.View
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
@@ -42,12 +44,16 @@ class CartActivity : CustomCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
+
     override fun setupActivity() {
         super.setupActivity()
         setContentView(R.layout.activity_cart)
         textTotal = findViewById(R.id.cart_activity_text_total)
         recyclerView = findViewById(R.id.cart_activity_recyclerview)
-        items = Gson().fromJson(intent.getStringExtra(Settings.Activities.ListJSON), ProviderDataProductDetailItems::class.java)
+        items = Gson().fromJson(
+            intent.getStringExtra(Settings.Activities.ListJSON),
+            ProviderDataProductDetailItems::class.java
+        )
 
         textTotal?.text = formatDouble(items.total)
         val adapter = items?.items?.let { CartListAdapter(this, it) }
@@ -64,22 +70,38 @@ class CartActivity : CustomCompatActivity() {
         itemTouchHelper.attachToRecyclerView(recyclerView)
 
     }
+
     override fun onBackPressed() {
         intent.putExtra(Settings.Extra.CartObject, Gson().toJson(items))
         setResult(RESULT_OK, intent)
         super.onBackPressed()
     }
+
     override fun invalidate() {
         super.invalidate()
+        textTotal?.isVisible = (items.total > 0.0)
         textTotal?.text = formatDouble(items.total)
     }
+
     private val Int.dp
         get() = TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP,
             toFloat(), resources.displayMetrics
         ).roundToInt()
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        Log.d("RESULT", "Code ${requestCode}")
+        if (resultCode == RESULT_OK && data != null && resultCode == CartCheckoutActivity.ACTIVITY_REQUEST_CODE) {
+
+        }
+    }
+    fun onCheckoutButtonClicked(view: View) {
+        val intent = Intent(this, CartCheckoutActivity::class.java).apply {
+            putExtra(Settings.Activities.ParentActivity, CartActivity::class.java.name)
+            putExtra(Settings.Activities.ActivityCaption, getString(R.string.cap_checkout))
+            putExtra(Settings.Activities.ListJSON, Gson().toJson(items))
+        }
+        startActivityForResult(intent, CartCheckoutActivity.ACTIVITY_REQUEST_CODE)
+    }
 }
-/*
-            intent.putExtra(Settings.Extra.UserObject, user)
-            setResult(RESULT_OK, intent)
- */

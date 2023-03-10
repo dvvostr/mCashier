@@ -33,10 +33,7 @@ import ru.studiq.mcashier.model.classes.activities.common.CustomCompatActivity
 import ru.studiq.mcashier.model.classes.hw.CustomHardwareError
 import ru.studiq.mcashier.model.classes.hw.barcode.*
 import ru.studiq.mcashier.model.classes.network.ProviderDataBody
-import ru.studiq.mcashier.model.classes.network.providerclasses.IDataProductInfoActivityListener
-import ru.studiq.mcashier.model.classes.network.providerclasses.ProviderDataDepartment
-import ru.studiq.mcashier.model.classes.network.providerclasses.ProviderDataProductInfo
-import ru.studiq.mcashier.model.classes.network.providerclasses.load
+import ru.studiq.mcashier.model.classes.network.providerclasses.*
 import java.io.Serializable
 
 
@@ -217,6 +214,22 @@ class SalesActivity : CustomCompatActivity(), SalesActionFragment.SalesItemClick
     }
 
     fun onActionButtonClicked(view: View) {
+        ProviderDataSaleDocument.load(this, object : IDataProviderDataSaleDocumentListener {
+            override fun onSuccess(sender: Context?, code: Int, msg: String, data: String?) {
+                print(data)
+                super.onSuccess(sender, code, msg, data)
+            }
+
+            override fun onSuccess(sender: Context?, code: Int, msg: String, data: Any?) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onError(sender: Context?, code: Int, msg: String) {
+                Log.d("ERROR", msg)
+                super.onError(sender, code, msg)
+            }
+        })
+
         val addPhotoBottomDialogFragment = SalesActionFragment.newInstance()
         addPhotoBottomDialogFragment.show(
             supportFragmentManager,

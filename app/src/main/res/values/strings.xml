@@ -25,6 +25,8 @@
     <string name="cap_pc">pc</string>
 
     <string name="cap_sales">Sales</string>
+    <string name="cap_checkout">Checkout</string>
+
     <string name="cap_underconstruction">Under construction</string>
     <string name="cap_salesreturns">Sales returns</string>
     <string name="cap_reports">Reports</string>

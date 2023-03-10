@@ -10,6 +10,9 @@ import ru.studiq.mcashier.UI.Activities.security.RegisterActivity
 import ru.studiq.mcashier.model.Settings
 
 open class CustomCompatActivity : AppCompatActivity() {
+    companion object {
+        public const val CART_ACTIVITY_REQUEST_CODE: Int = -1
+    }
     public var parentActivityName: String = ""
     public var targetActivityName: String = ""
     public var isLockBackNavigation: Boolean = false

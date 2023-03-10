@@ -11,6 +11,8 @@ import ru.studiq.mcashier.model.classes.network.providerclasses.ProviderDataMain
 import java.io.IOException
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
+import java.text.SimpleDateFormat
+import java.util.*
 
 typealias JSONText = String
 
@@ -109,4 +111,7 @@ public fun formatDouble(value: Double?): String {
     } ?: run {
         return ""
     }
+}
+fun formatDate(date: Date?, format: String) = with(date ?: Date()) {
+    SimpleDateFormat(format).format(this)
 }

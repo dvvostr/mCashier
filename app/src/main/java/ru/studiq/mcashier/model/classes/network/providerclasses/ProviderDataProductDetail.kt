@@ -9,14 +9,16 @@ import ru.studiq.mcashier.interfaces.IProviderClientListener
 import ru.studiq.mcashier.model.Settings
 import ru.studiq.mcashier.model.classes.network.*
 import ru.studiq.mcashier.model.classes.network.providerclasses.CustomProviderData
+import ru.studiq.mcashier.model.classes.network.providerclasses.IDataCustomListener
 import ru.studiq.mcashier.model.classes.network.providerclasses.ProviderDataProductInfo
 import ru.studiq.mcashier.model.classes.network.providerclasses.ProviderDataUser
 import java.io.Serializable
 
-interface IDataProductDetailActivityListener {
+interface IDataProductDetailActivityListener: IDataCustomListener {
+    override fun onSuccess(sender: Context?, code: Int, msg: String, data: Any?) {
+        onSuccess(sender, code, msg, data as? ProviderDataProductDetail)
+    }
     fun onSuccess(sender: Context?, code: Int, msg: String, data: ProviderDataProductDetail?) {}
-    fun onEmpty(sender: Context?) {}
-    fun onError(sender: Context?, code: Int, msg: String) {}
 }
 data class ProviderDataProductDetailItems (
     @field:SerializedName("items") var items: MutableList<ProviderDataProductDetail> = arrayListOf()

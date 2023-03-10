@@ -22,6 +22,7 @@ public final class Settings {
     }
     public final class Application {
         companion object {
+            public val buttonSize: Int = 48
             private var strUser: String = ""
             private var strDepartment: String = ""
             public var currentUser: ProviderDataUser?
