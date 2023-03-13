@@ -1,7 +1,17 @@
 package ru.studiq.mcashier.model.classes.network.providerclasses
 
 import android.content.Context
+import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
+import com.google.gson.reflect.TypeToken
+import ru.studiq.mcashier.common.formatDate
+import ru.studiq.mcashier.interfaces.ICustomListActivityListener
+import ru.studiq.mcashier.model.classes.network.CreateProviderRequest
+import ru.studiq.mcashier.model.classes.network.ProviderDataBody
+import ru.studiq.mcashier.model.classes.network.ProviderRequestMethodStatic
+import ru.studiq.mcashier.model.classes.network.ProviderRequestSystemType
+import java.io.Serializable
+import java.util.*
 
 interface IDataProviderCheckoutDocumentListener: IDataCustomListener {
     fun onSuccess(sender: Context?, code: Int, msg: String, data: String?) {}
@@ -38,6 +48,7 @@ data class ProviderCheckoutDocumentStaff (
     @field:SerializedName("Cashier") var isCashier: Int,
     @field:SerializedName("EmployeeID") var id: Int,
     @field:SerializedName("EmployeeCode") var code: String,
+    @field:SerializedName("EmployeeName") var name: String,
     @field:SerializedName("AmountShare") var amountShare: Double,
     @field:SerializedName("PercentShare") var percentShare: Int
 ): CustomProviderData() {
@@ -85,4 +96,27 @@ data class ProviderCheckoutDocument (
             })
             return value
         }
+    fun save(sender: Context?, listener: IDataProviderCheckoutDocumentListener) {
+        val request = CreateProviderRequest(UUID.randomUUID().toString(), ProviderRequestSystemType.axapta, ProviderRequestMethodStatic.none, "ExchangeCashDesk_MRC", "processSale")
+        var params: List<String> = listOf()
+        val param = Gson().toJson(this)
+        params = params.plus(param)
+        CustomProviderData.Companion.load(sender, request, listOf(), params, object :
+            ICustomListActivityListener {
+            override fun onSuccess(sender: Context?, code: Int, msg: String, data: Serializable?) {
+                super.onSuccess(sender, code, msg, data)
+                val json = Gson().toJson((data as? ProviderDataBody)?.data)
+                var items = ProviderDataCurrencyList(Gson().fromJson(Gson().toJson((data as? ProviderDataBody)?.data), object : TypeToken<List<ProviderDataCurrency?>?>() {}.type))
+                listener.onSuccess(sender, code, msg, items)
+            }
+            override fun onEmpty(sender: Context?) {
+                super.onEmpty(sender)
+                listener.onEmpty(sender)
+            }
+            override fun onError(sender: Context?, code: Int, msg: String) {
+                super.onError(sender, code, msg)
+                listener.onError(sender, code, msg)
+            }
+        })
+    }
 }

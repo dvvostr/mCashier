@@ -29,6 +29,9 @@ data class ProviderRequestBody(
 
     @field:SerializedName("ConstructorParams") var constructorParams: Array<ProviderRequestMethodParam?>,
     @field:SerializedName("MethodParams") var methodParams: Array<ProviderRequestMethodParam?>,
+
+//    @field:SerializedName("ConstructorParams") var constructorParams: Array<ProviderRequestMethodParam?>,
+//    @field:SerializedName("MethodParams") var methodParams: Array<ProviderRequestMethodParam?>,
 ) {}
 data class ProviderRequestMethodParam(
     @field:SerializedName("ParamValue") val value: String

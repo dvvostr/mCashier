@@ -55,7 +55,7 @@ data class ProviderDataProductInfoExItems (
             Settings.Application.currentDepartment?.id ?: "",
             Settings.Application.cashbox,
             "",
-            Settings.Application.currentUser?.userName ?: ""
+            Settings.Application.currentUser?.staffCode ?: ""
         )
         var articles: List<ProviderCheckoutDocumentArticle> = listOf()
         this.items.forEach({
@@ -66,8 +66,9 @@ data class ProviderDataProductInfoExItems (
             staffs = staffs.plus(
                 ProviderCheckoutDocumentStaff(
                     it.posIndex,
-                    1,
-                    Settings.Application.currentUser?.id ?: -1,
+                    0,
+                    Settings.Application.currentUser?.hrID ?: -1,
+                    Settings.Application.currentUser?.staffCode ?: "",
                     Settings.Application.currentUser?.userName ?: "",
                     (it.currentPrice * it.qty),
                     100

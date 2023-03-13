@@ -1,5 +1,6 @@
 package ru.studiq.mcashier.UI.Activities
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -13,9 +14,12 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import ru.studiq.mcashier.R
 import ru.studiq.mcashier.UI.Activities.security.RegisterActivity
+import ru.studiq.mcashier.common.Common
 import ru.studiq.mcashier.common.formatDouble
 import ru.studiq.mcashier.model.Settings
+import ru.studiq.mcashier.model.classes.App
 import ru.studiq.mcashier.model.classes.activities.common.CustomCompatActivity
+import ru.studiq.mcashier.model.classes.network.providerclasses.IDataProviderCheckoutDocumentListener
 import ru.studiq.mcashier.model.classes.network.providerclasses.ProviderCheckoutDocument
 import ru.studiq.mcashier.model.classes.network.providerclasses.ProviderCheckoutDocumentHeader
 import ru.studiq.mcashier.model.classes.network.providerclasses.ProviderDataUser
@@ -23,6 +27,7 @@ import ru.studiq.mcashier.model.classes.network.providerclasses.ProviderDataUser
 class CartCheckoutActivity : CustomCompatActivity() {
     var successParentActivity: String = ""
     var failedParentActivity: String = ""
+    private var items: ProviderCheckoutDocument? = null
 
     private var textTotal: TextView? = null
     private var textQty: TextView? = null
@@ -53,12 +58,12 @@ class CartCheckoutActivity : CustomCompatActivity() {
             this.failedParentActivity = value
         }
         val str = intent.getStringExtra(Settings.Activities.ListJSON) ?: ""
-        val data = Gson().fromJson(str, ProviderCheckoutDocument::class.java)
+        items = Gson().fromJson(str, ProviderCheckoutDocument::class.java)
 
-        textTotal?.text = formatDouble(data.totalSum)
-        textQty?.text = formatDouble(data.totalQty, "#,##0")
-        textStuff?.text = data.staffs?.first()?.code ?: ""
-        textPaymentType?.text = data.payment?.first()?.type ?: ""
+        textTotal?.text = formatDouble(items?.totalSum ?: 0.0)
+        textQty?.text = formatDouble(items?.totalQty ?: 0.0, "#,##0")
+        textStuff?.text = items?.staffs?.first()?.code ?: ""
+        textPaymentType?.text = items?.payment?.first()?.type ?: ""
 
         getSupportActionBar()?.let { actionBar ->
             actionBar.setDisplayHomeAsUpEnabled((successParentActivity.length > 0 && failedParentActivity.length > 0))
@@ -66,6 +71,20 @@ class CartCheckoutActivity : CustomCompatActivity() {
     }
 
     fun onCheckoutButtonClicked(view: View) {
-        finish()
+        val activity = this
+        items?.save(this, object : IDataProviderCheckoutDocumentListener {
+            override fun onSuccess(sender: Context?, code: Int, msg: String, data: Any?) {
+                super.onSuccess(sender, code, msg, data)
+                finish()
+            }
+            override fun onEmpty(sender: Context?) {
+                super.onEmpty(sender)
+                Common.AlertDialog.show(activity, getString(R.string.cap_error), getString(R.string.err_data_empty))
+            }
+            override fun onError(sender: Context?, code: Int, msg: String) {
+                super.onError(sender, code, msg)
+                Common.AlertDialog.show(activity, getString(R.string.cap_error), msg)
+            }
+        })
     }
 }
