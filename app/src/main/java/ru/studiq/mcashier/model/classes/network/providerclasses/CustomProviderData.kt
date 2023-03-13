@@ -28,15 +28,16 @@ open class CustomProviderData: java.io.Serializable {
                         override fun onSuccess(response: ProviderResponse, header: ProviderDataHeader, data: ProviderDataBody) {
                             if (header.id == request.header.id && header.code >= 0)
                                 if (data.type == ru.studiq.mcashier.model.classes.network.ProviderDataBodyType.normal.ordinal) {
-                                    (data.data as? List<Any?>)?.let {
-                                        if (it.size > 0)
-                                            listener.onSuccess(sender, header.code, header.msg, data)
-                                        else
-                                            listener.onError(sender, -1, sender?.getString(R.string.err_data_empty) ?: "")
-                                    } ?: run {
-                                        listener.onError(sender, -1, sender?.getString(R.string.err_data_empty) ?: ""
-                                        )
-                                    }
+                                    listener.onSuccess(sender, header.code, header.msg, data)
+//                                    (data.data as? List<Any?>)?.let {
+//                                        if (it.size > 0)
+//                                            listener.onSuccess(sender, header.code, header.msg, data)
+//                                        else
+//                                            listener.onError(sender, -1, sender?.getString(R.string.err_data_empty) ?: "")
+//                                    } ?: run {
+//                                        listener.onError(sender, -1, sender?.getString(R.string.err_data_empty) ?: ""
+//                                        )
+//                                    }
                                 } else if (data.type == ProviderDataBodyType.axapta.ordinal) {
                                     listener.onSuccess(sender, header.code, header.msg, data)
                                 } else {

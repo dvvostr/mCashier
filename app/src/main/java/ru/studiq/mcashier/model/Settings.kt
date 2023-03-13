@@ -23,8 +23,10 @@ public final class Settings {
     public final class Application {
         companion object {
             public val buttonSize: Int = 48
+            public val isDebugMode: Boolean = true
             private var strUser: String = ""
             private var strDepartment: String = ""
+            public val cashbox: String = "КА000218"
             public var currentUser: ProviderDataUser?
             get() {
                 return Gson().fromJson(strUser, ProviderDataUser::class.java)
@@ -162,6 +164,8 @@ public final class Settings {
         companion object {
             val ParentActivity: String = "PARENT_ACTIVITY"
             val TargetActivity: String = "TARGET_ACTIVITY"
+            val SuccessActivity: String = "SUCCESS_ACTIVITY"
+            val FailedActivity: String = "FALED_ACTIVITY"
             val ActivityCaption: String = "CAPTION_ACTIVITY"
             val ListJSON: String = "LIST_DATA_JSON"
             val ListItems: String = "LIST_DATA_ITEMS"

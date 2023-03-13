@@ -1,6 +1,5 @@
 package ru.studiq.mcashier.model.classes.network.providerclasses
 
-import ProviderDataProductDetail
 import android.content.Context
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
@@ -22,7 +21,7 @@ interface IDataProviderDataSaleDocumentListener: IDataCustomListener {
 
 data class ProviderDataSaleDocument (
     @field:SerializedName("DocumentNumber") val code: String,
-    @field:SerializedName("Items") val items: List<ProviderDataProductDetail>?,
+    @field:SerializedName("Items") val items: List<ProviderDataProductInfoEx>?,
     @field:SerializedName("Rates") val currencyRate: List<ProviderDataCurrency>?
 
 ): java.io.Serializable {

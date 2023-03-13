@@ -26,10 +26,11 @@
         android:layout_height="20dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:textSize="16dp"
-        android:textColor="@color/text_gray"
+        android:layout_marginEnd="16dp"
         android:text="TextView"
-        app:layout_constraintEnd_toEndOf="@+id/departmentlist_row_caption"
+        android:textColor="@color/text_gray"
+        android:textSize="16dp"
+        app:layout_constraintEnd_toStartOf="@+id/departmentlist_row_code"
         app:layout_constraintStart_toStartOf="@+id/departmentlist_row_caption"
         app:layout_constraintTop_toBottomOf="@+id/departmentlist_row_caption" />
 
@@ -46,4 +47,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/departmentlist_row_description" />
+
+    <TextView
+        android:id="@+id/departmentlist_row_code"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textColor="@color/text_gray"
+        android:textSize="16dp"
+        android:textFontWeight="@integer/font_500"
+        app:layout_constraintBottom_toBottomOf="@+id/departmentlist_row_description"
+        app:layout_constraintEnd_toEndOf="@+id/departmentlist_row_caption"
+        app:layout_constraintTop_toTopOf="@+id/departmentlist_row_description" />
 </androidx.constraintlayout.widget.ConstraintLayout>

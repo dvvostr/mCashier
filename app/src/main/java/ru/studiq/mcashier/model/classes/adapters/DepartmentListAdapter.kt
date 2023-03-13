@@ -22,6 +22,7 @@ class DepartmentListAdapter( private val list: List<ProviderDataDepartment> ) : 
     }
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.item = list[position]
+        holder.codeView.text = list[position].id
         holder.captionView.text = list[position].caption
         holder.descriptionView.text = list[position].description
         holder.setEvent(object: IObjectClickListener {
@@ -35,11 +36,13 @@ class DepartmentListAdapter( private val list: List<ProviderDataDepartment> ) : 
     //************************************************//
     class ViewHolder(itemsView: View): RecyclerView.ViewHolder(itemsView), View.OnClickListener {
         internal var item: ProviderDataDepartment? = null
+        internal var codeView: TextView
         internal var captionView: TextView
         internal var descriptionView: TextView
         internal lateinit var iObjectClickListener: IObjectClickListener
 
         init {
+            this.codeView = itemsView.findViewById(R.id.departmentlist_row_code)
             this.captionView = itemsView.findViewById(R.id.departmentlist_row_caption)
             this.descriptionView = itemsView.findViewById(R.id.departmentlist_row_description)
             this.itemView.setOnClickListener(this)

@@ -4,6 +4,112 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/image_main_bg"
     tools:context=".UI.Activities.CartCheckoutActivity">
 
+    <TextView
+        android:id="@+id/checkout_activity_action_total"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:gravity="center_vertical"
+        android:text="TextView"
+        android:textAlignment="textEnd"
+        android:textFontWeight="@integer/font_600"
+        android:textSize="38sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="RtlCompat" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/checkout_activity_action_layout"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/checkout_activity_action_button"
+            style="@style/MtTintButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="62dp"
+            android:onClick="onCheckoutButtonClicked"
+            android:paddingLeft="52dp"
+            android:paddingRight="52dp"
+            android:text="@string/cap_checkout"
+            app:cornerRadius="30dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/checkout_activity_caption_qty"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="@string/cap_total_qty"
+        app:layout_constraintEnd_toStartOf="@+id/checkout_activity_value_qty"
+        app:layout_constraintStart_toStartOf="@+id/checkout_activity_action_total"
+        app:layout_constraintTop_toBottomOf="@+id/checkout_activity_action_total" />
+
+    <TextView
+        android:id="@+id/checkout_activity_value_qty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textSize="18sp"
+        android:textFontWeight="@integer/font_500"
+        app:layout_constraintBottom_toBottomOf="@+id/checkout_activity_caption_qty"
+        app:layout_constraintEnd_toEndOf="@+id/checkout_activity_action_total"
+        app:layout_constraintTop_toTopOf="@+id/checkout_activity_caption_qty" />
+
+    <TextView
+        android:id="@+id/checkout_activity_caption_stuff"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="@string/cap_saller"
+        app:layout_constraintEnd_toStartOf="@+id/checkout_activity_value_stuff"
+        app:layout_constraintStart_toStartOf="@+id/checkout_activity_caption_qty"
+        app:layout_constraintTop_toBottomOf="@+id/checkout_activity_caption_qty" />
+
+    <TextView
+        android:id="@+id/checkout_activity_value_stuff"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textSize="18sp"
+        android:textFontWeight="@integer/font_500"
+        app:layout_constraintBottom_toBottomOf="@+id/checkout_activity_caption_stuff"
+        app:layout_constraintEnd_toEndOf="@+id/checkout_activity_value_qty"
+        app:layout_constraintTop_toTopOf="@+id/checkout_activity_caption_stuff" />
+
+    <TextView
+        android:id="@+id/checkout_activity_caption_paymenttype"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="@string/cap_payment_type"
+        app:layout_constraintEnd_toStartOf="@+id/checkout_activity_value_paymenttype"
+        app:layout_constraintStart_toStartOf="@+id/checkout_activity_caption_stuff"
+        app:layout_constraintTop_toBottomOf="@+id/checkout_activity_caption_stuff" />
+
+    <TextView
+        android:id="@+id/checkout_activity_value_paymenttype"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textSize="18sp"
+        android:textFontWeight="@integer/font_500"
+        app:layout_constraintBottom_toBottomOf="@+id/checkout_activity_caption_paymenttype"
+        app:layout_constraintEnd_toEndOf="@+id/checkout_activity_value_stuff"
+        app:layout_constraintTop_toTopOf="@+id/checkout_activity_caption_paymenttype" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -32,12 +32,19 @@
     <string name="cap_register">Регистрация</string>
     <string name="cap_enterpassword">Введите пароль</string>
 
+    <string name="cap_total_qty">Всего количество</string>
+    <string name="cap_saller">Продавец</string>
+    <string name="cap_payment_type">Тип оплаты</string>
+
     <string name="cap_error">Ошибка</string>
 
     <string name="err_data_empty">Нет данных</string>
     <string name="error_unassigned">Неизвестная ощибка</string>
     <string name="error_department_not_set">Подразделение не выбрано</string>
     <string name="error_user_not_set">Не выбран пользователь</string>
+    <string name="error_product_already_exists">Такой товар уже есть</string>
+    <string name="error_product_less_rest">Остаток товара меньше продажи</string>
+
 
     <string name="error_scanner_cancelled">Сканирование отменено.</string>
     <string name="error_camera_permission_not_granted">Нет разрешения на камеру.</string>

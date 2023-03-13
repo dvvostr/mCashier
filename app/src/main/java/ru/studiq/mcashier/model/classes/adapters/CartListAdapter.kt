@@ -1,6 +1,5 @@
 package ru.studiq.mcashier.model.classes.adapters
 
-import ProviderDataProductDetail
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,8 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.studiq.mcashier.R
 import ru.studiq.mcashier.common.formatDouble
 import ru.studiq.mcashier.model.classes.activities.common.CustomCompatActivity
+import ru.studiq.mcashier.model.classes.network.providerclasses.ProviderDataProductInfoEx
 
-class CartListAdapter(private val context: CustomCompatActivity, private val list: MutableList<ProviderDataProductDetail>) :
+class CartListAdapter(private val context: CustomCompatActivity, private val list: MutableList<ProviderDataProductInfoEx>) :
     RecyclerView.Adapter<ItemViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
@@ -19,14 +19,14 @@ class CartListAdapter(private val context: CustomCompatActivity, private val lis
         )
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        holder.textArticle.text = list[position].info?.article ?: ""
+        holder.textArticle.text = list[position]?.article ?: ""
         holder.textPLU.text = list[position].PLU
-        holder.textDesc.text = list[position].info?.subTradeMarkName ?: ""
-        holder.textName.text = list[position].caption
-        holder.textColor.text = "${context.getString(R.string.cap_color)}: ${list[position].ColorID}"
-        holder.textSize.text = "${context.getString(R.string.cap_size)}: ${list[position].SizeID}"
-        holder.textQty.text = "1 ${context.getString(R.string.cap_pc)}."
-        holder.textPrice.text = formatDouble(list[position].info?.price) ?: ""
+        holder.textDesc.text = list[position]?.trademarkName ?: ""
+        holder.textName.text = list[position].description
+        holder.textColor.text = "${context.getString(R.string.cap_color)}: ${list[position].color}"
+        holder.textSize.text = "${context.getString(R.string.cap_size)}: ${list[position].size}"
+        holder.textQty.text = "${formatDouble(list[position].qty)} ${context.getString(R.string.cap_pc)}."
+        holder.textPrice.text = formatDouble(list[position]?.currentPrice) ?: ""
     }
     fun removeAt(position: Int) {
         list.removeAt(position)

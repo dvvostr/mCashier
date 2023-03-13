@@ -1,16 +1,7 @@
 package ru.studiq.mcashier.UI.Activities
 
-import ProviderDataProductDetail
-import ProviderDataProductDetailItems
-import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Rect
-import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.util.Log
 import android.util.TypedValue
 import android.view.View
@@ -18,7 +9,6 @@ import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import ru.studiq.mcashier.R
 import ru.studiq.mcashier.common.formatDouble
@@ -27,6 +17,7 @@ import ru.studiq.mcashier.model.classes.activities.common.CustomCompatActivity
 import ru.studiq.mcashier.model.classes.adapters.CartListAdapter
 import ru.studiq.mcashier.model.classes.adapters.CartSwipeToDeleteCallback
 import ru.studiq.mcashier.model.classes.network.providerclasses.ProviderDataDepartment
+import ru.studiq.mcashier.model.classes.network.providerclasses.ProviderDataProductInfoExItems
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
@@ -37,7 +28,7 @@ class CartActivity : CustomCompatActivity() {
 
     private var textTotal: TextView? = null
     private var recyclerView: RecyclerView? = null
-    private var items: ProviderDataProductDetailItems = ProviderDataProductDetailItems()
+    private var items: ProviderDataProductInfoExItems = ProviderDataProductInfoExItems()
 
     private lateinit var swipeHelper: ItemTouchHelper
 
@@ -52,7 +43,7 @@ class CartActivity : CustomCompatActivity() {
         recyclerView = findViewById(R.id.cart_activity_recyclerview)
         items = Gson().fromJson(
             intent.getStringExtra(Settings.Activities.ListJSON),
-            ProviderDataProductDetailItems::class.java
+            ProviderDataProductInfoExItems::class.java
         )
 
         textTotal?.text = formatDouble(items.total)
@@ -97,11 +88,15 @@ class CartActivity : CustomCompatActivity() {
         }
     }
     fun onCheckoutButtonClicked(view: View) {
+        val data = items.asCheckoutDocument
         val intent = Intent(this, CartCheckoutActivity::class.java).apply {
             putExtra(Settings.Activities.ParentActivity, CartActivity::class.java.name)
             putExtra(Settings.Activities.ActivityCaption, getString(R.string.cap_checkout))
-            putExtra(Settings.Activities.ListJSON, Gson().toJson(items))
+            putExtra(Settings.Activities.SuccessActivity, CartActivity::class.java.name)
+            putExtra(Settings.Activities.FailedActivity, SalesActivity::class.java.name)
+            putExtra(Settings.Activities.ListJSON, Gson().toJson(data))
         }
-        startActivityForResult(intent, CartCheckoutActivity.ACTIVITY_REQUEST_CODE)
+        startActivity(intent)
+        finish()
     }
 }

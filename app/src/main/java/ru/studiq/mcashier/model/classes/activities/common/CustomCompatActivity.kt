@@ -16,7 +16,7 @@ open class CustomCompatActivity : AppCompatActivity() {
     public var parentActivityName: String = ""
     public var targetActivityName: String = ""
     public var isLockBackNavigation: Boolean = false
-    public var activity: CustomCompatActivity = this
+    var activity: CustomCompatActivity = this
     private var actionbar: ActionBar? = null
 
     open var caption: String
@@ -41,7 +41,6 @@ open class CustomCompatActivity : AppCompatActivity() {
 // TODO Animate back transition
 //        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
     }
-    // TODO Animate Ontions Item Click
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.getItemId()) {
             android.R.id.home -> {
@@ -84,8 +83,12 @@ open class CustomCompatActivity : AppCompatActivity() {
     override fun getParentActivityIntent(): Intent? {
         return this.handleGetParentActivityIntent() ?: super.getParentActivityIntent()
     }
-
-    private fun handleGetParentActivityIntent(): Intent? {
+    open fun getActivityIntent(name: String): Intent? {
+        var obj = Class.forName(name)
+        val result: Intent? = Intent(this, obj.javaClass)
+        return result
+    }
+    open fun handleGetParentActivityIntent(): Intent? {
         var intent: Intent? = null
         RegisterActivity::class.java.name
         when (parentActivityName) {

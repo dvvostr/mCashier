@@ -32,6 +32,7 @@ import ru.studiq.mcashier.interfaces.ICustomListActivityListener
 import ru.studiq.mcashier.interfaces.IObjectClickListener
 import ru.studiq.mcashier.interfaces.IProviderClientListener
 import ru.studiq.mcashier.model.Settings
+import ru.studiq.mcashier.model.classes.App
 import ru.studiq.mcashier.model.classes.activities.common.CustomCompatActivity
 import ru.studiq.mcashier.model.classes.adapters.DepartmentListAdapter
 import ru.studiq.mcashier.model.classes.network.*
@@ -54,7 +55,7 @@ fun DepartmentListActivity.Companion.load(sender: Context?, listener: ICustomLis
                     if (header.id == id && header.code >= 0 && data.type == ru.studiq.mcashier.model.classes.network.ProviderDataBodyType.normal.ordinal) {
                         listener.onSuccess(sender, header.code, header.msg, data)
                     } else {
-                        listener.onError(sender, header.code, header.msg)
+                        listener.onError(sender, header.code, if (header.msg.length == 0) App.appContext.getString(R.string.error_unassigned) else header.msg)
                     }
                 }
 

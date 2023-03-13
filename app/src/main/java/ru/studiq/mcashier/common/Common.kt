@@ -101,7 +101,7 @@ object Common {
         }
     }
 }
-public fun formatDouble(value: Double?): String {
+public fun formatDouble(value: Double?, format: String = "#,##0.00"): String {
     value?.let {
         val decimalFormatSymbols = DecimalFormatSymbols()
         decimalFormatSymbols.decimalSeparator = '.'

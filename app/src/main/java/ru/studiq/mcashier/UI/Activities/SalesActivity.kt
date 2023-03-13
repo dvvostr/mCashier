@@ -1,8 +1,5 @@
 package ru.studiq.mcashier.UI.Activities
 
-import IDataProductDetailActivityListener
-import ProviderDataProductDetail
-import ProviderDataProductDetailItems
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
@@ -13,15 +10,14 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
-import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.MenuCompat
+import androidx.core.view.isVisible
 import com.google.android.material.badge.BadgeDrawable
 import com.google.android.material.badge.BadgeUtils
 import com.google.android.material.button.MaterialButton
 import com.google.gson.Gson
-import load
 import ru.studiq.mcashier.R
 import ru.studiq.mcashier.UI.Activities.security.RegisterActivity
 import ru.studiq.mcashier.UI.Fragments.SalesActionFragment
@@ -55,8 +51,8 @@ class SalesActivity : CustomCompatActivity(), SalesActionFragment.SalesItemClick
     private var badgeDrawable: BadgeDrawable? = null
 
     private var scanner: CustomBarcodeScanner? = null
-    private var sales: ProviderDataProductDetailItems = ProviderDataProductDetailItems()
-    private var current: ProviderDataProductDetail? = null
+    private var sales: ProviderDataProductInfoExItems = ProviderDataProductInfoExItems()
+    private var current: ProviderDataProductInfoEx? = null
         get() {
             return sales.items.last()
         }
@@ -64,7 +60,7 @@ class SalesActivity : CustomCompatActivity(), SalesActionFragment.SalesItemClick
         get(){
             var value: Double = 0.0
             sales.items.forEach({
-                value = value.plus(it.info?.price ?: 0.0)
+                value = value.plus(it?.currentPrice ?: 0.0)
             })
             return value
     }
@@ -78,7 +74,8 @@ class SalesActivity : CustomCompatActivity(), SalesActionFragment.SalesItemClick
         supportActionBar?.title = getString(R.string.cap_sales).toUpperCase()
         supportActionBar?.subtitle = Settings.Application.currentDepartment?.caption
         textTotal = findViewById(R.id.sales_activity_text_total)
-        textSubTrademark = findViewById(ru.studiq.mcashier.R.id.sales_activity_text_subtrademark)
+        textSubTrademark = findViewById(R.id.sales_activity_text_subtrademark)
+        textBarcode = findViewById(R.id.sales_activity_text_barcode)
         textPLU = findViewById(R.id.sales_activity_text_plu)
         textArticle = findViewById(R.id.sales_activity_text_article)
         textName = findViewById(R.id.sales_activity_text_name)
@@ -127,6 +124,7 @@ class SalesActivity : CustomCompatActivity(), SalesActionFragment.SalesItemClick
     }
     override fun initialize() {
         super.initialize()
+        textBarcode?.text = ""
         textPLU?.text = ""
         textArticle?.text = ""
         textName?.text = ""
@@ -200,7 +198,7 @@ class SalesActivity : CustomCompatActivity(), SalesActionFragment.SalesItemClick
             supportActionBar?.subtitle = Settings.Application.currentDepartment?.caption ?: ""
         } else if (resultCode == RESULT_OK && requestCode == CartActivity.Companion.CART_ACTIVITY_REQUEST_CODE) {
             initialize()
-            sales = Gson().fromJson(data?.getStringExtra(Settings.Extra.CartObject), ProviderDataProductDetailItems::class.java)
+            sales = Gson().fromJson(data?.getStringExtra(Settings.Extra.CartObject), ProviderDataProductInfoExItems::class.java)
             invalidate()
 
         } else {
@@ -214,27 +212,23 @@ class SalesActivity : CustomCompatActivity(), SalesActionFragment.SalesItemClick
     }
 
     fun onActionButtonClicked(view: View) {
-        ProviderDataSaleDocument.load(this, object : IDataProviderDataSaleDocumentListener {
-            override fun onSuccess(sender: Context?, code: Int, msg: String, data: String?) {
-                print(data)
-                super.onSuccess(sender, code, msg, data)
-            }
-
-            override fun onSuccess(sender: Context?, code: Int, msg: String, data: Any?) {
-                TODO("Not yet implemented")
-            }
-
-            override fun onError(sender: Context?, code: Int, msg: String) {
-                Log.d("ERROR", msg)
-                super.onError(sender, code, msg)
-            }
-        })
-
+//        ProviderDataSaleDocument.load(this, object : IDataProviderDataSaleDocumentListener {
+//            override fun onSuccess(sender: Context?, code: Int, msg: String, data: String?) {
+//                print(data)
+//                super.onSuccess(sender, code, msg, data)
+//            }
+//
+//            override fun onSuccess(sender: Context?, code: Int, msg: String, data: Any?) {
+//                TODO("Not yet implemented")
+//            }
+//
+//            override fun onError(sender: Context?, code: Int, msg: String) {
+//                Log.d("ERROR", msg)
+//                super.onError(sender, code, msg)
+//            }
+//        })
         val addPhotoBottomDialogFragment = SalesActionFragment.newInstance()
-        addPhotoBottomDialogFragment.show(
-            supportFragmentManager,
-            SalesActionFragment.TAG
-        )
+        addPhotoBottomDialogFragment.show(supportFragmentManager, SalesActionFragment.TAG)
     }
     override fun onItemClick(item: String?) {
         Toast.makeText(this, "Selected action item is $item", Toast.LENGTH_LONG).show()
@@ -255,41 +249,27 @@ class SalesActivity : CustomCompatActivity(), SalesActionFragment.SalesItemClick
                 val params = barcode?.text ?: ""
                 if (params.length > 0) {
                     Common.WaitDialog.show(senderContext, false)
-                    ProviderDataProductDetail.load(senderContext, params, object : IDataProductDetailActivityListener {
-                            override fun onSuccess(sender: Context?, code: Int, msg: String, data: ProviderDataProductDetail?) {
-                                val obj = data?.let { detail ->
-                                    ProviderDataProductInfo.load(sender, detail.barcode, object : IDataProductInfoActivityListener {
-                                            override fun onSuccess(sender: Context?, code: Int, msg: String, data: ProviderDataProductInfo?) {
-                                                super.onSuccess(sender, code, msg, data)
-                                                val obj = data?.let { info ->
-                                                    detail.info = info
-                                                    onProductScan(detail)
-                                                } ?: run {
-                                                    onActivityError(
-                                                        CustomHardwareError(-1, senderContext.getString(R.string.error_unassigned))
-                                                    )
-                                                }
-                                                Common.WaitDialog.dismiss()
-                                            }
-                                            override fun onEmpty(sender: Context?) {
-                                                super.onEmpty(sender)
-                                                Common.WaitDialog.dismiss()
-                                                onActivityError(CustomHardwareError(code, senderContext.getString(R.string.err_data_empty))
-                                                )
-                                            }
-                                            override fun onError(sender: Context?, code: Int, msg: String) {
-                                                Common.WaitDialog.dismiss()
-                                                onActivityError(CustomHardwareError( code, msg ?: senderContext.getString(R.string.error_unassigned)))
-                                            }
-                                        })
+                    ProviderDataProductInfoEx.load(senderContext, params, object : IDataProductInfoExActivityListener {
+                            override fun onSuccess(sender: Context?, code: Int, msg: String, data: ProviderDataProductInfoEx?) {
+                                super.onSuccess(sender, code, msg, data)
+                                val obj = data?.let { info ->
+                                    onProductScan(info)
                                 } ?: run {
-                                    Common.WaitDialog.dismiss()
-                                    onActivityError(CustomHardwareError(-1, senderContext.getString(R.string.error_unassigned)))
+                                    onActivityError(
+                                        CustomHardwareError(-1, senderContext.getString(R.string.error_unassigned))
+                                    )
                                 }
+                                Common.WaitDialog.dismiss()
+                            }
+                            override fun onEmpty(sender: Context?) {
+                                super.onEmpty(sender)
+                                Common.WaitDialog.dismiss()
+                                onActivityError(CustomHardwareError(-1, senderContext.getString(R.string.err_data_empty))
+                                )
                             }
                             override fun onError(sender: Context?, code: Int, msg: String) {
                                 Common.WaitDialog.dismiss()
-                                onActivityError(CustomHardwareError(code, msg ?: senderContext.getString(R.string.error_unassigned)))
+                                onActivityError(CustomHardwareError( code, msg ?: senderContext.getString(R.string.error_unassigned)))
                             }
                         })
                 } else
@@ -303,17 +283,23 @@ class SalesActivity : CustomCompatActivity(), SalesActionFragment.SalesItemClick
             }
         })
     }
-    private fun onProductScan(product: ProviderDataProductDetail) {
+    private fun onProductScan(product: ProviderDataProductInfoEx) {
         runOnUiThread {
-            sales.items = sales.items.plus(product) as MutableList<ProviderDataProductDetail>
-            textSubTrademark?.text = product.info?.subTradeMarkName ?: ""
-            textPLU?.text = product.PLU
-            textArticle?.text = product.info?.article ?: ""
-            textName?.text = product.caption
-            textColor?.text = "${this.getString(R.string.cap_color)}: ${product.ColorID}"
-            textSize?.text = "${this.getString(R.string.cap_size)}: ${product.SizeID}"
-            textPrice?.text = product?.info?.let {  formatDouble(it.price) } ?: run { "" }
-            invalidate()
+            if (sales.check(product)) {
+                sales.items = sales.items.plus(product) as MutableList<ProviderDataProductInfoEx>
+                textSubTrademark?.text = product?.trademarkName ?: ""
+                textBarcode?.isVisible = Settings.Application.isDebugMode
+                textBarcode?.text = product?.barcode ?: ""
+                textPLU?.text = product.PLU
+                textArticle?.text = product.article ?: ""
+                textName?.text = product.description
+                textColor?.text = "${this.getString(R.string.cap_color)}: ${product?.color ?: ""}"
+                textSize?.text = "${this.getString(R.string.cap_size)}: ${product?.size ?: ""}"
+                textPrice?.text = product?.currentPrice?.let {  formatDouble(it) } ?: run { "" }
+                invalidate()
+            } else {
+                Common.AlertDialog.show(this, getString(R.string.cap_error), getString(R.string.error_product_less_rest))
+            }
         }
     }
     private fun onActivityError(error: CustomHardwareError) {

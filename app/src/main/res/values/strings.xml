@@ -24,6 +24,11 @@
     <string name="cap_size">size</string>
     <string name="cap_pc">pc</string>
 
+    <string name="cap_total_qty">Total qty</string>
+    <string name="cap_saller">Saller</string>
+    <string name="cap_payment_type">Payment type</string>
+
+
     <string name="cap_sales">Sales</string>
     <string name="cap_checkout">Checkout</string>
 
@@ -43,6 +48,8 @@
     <string name="error_unassigned">Unassigned error</string>
     <string name="error_user_not_set">User not selected</string>
     <string name="error_department_not_set">Unknown department</string>
+    <string name="error_product_already_exists">This product already exists</string>
+    <string name="error_product_less_rest">The rest of the goods is less than the sale</string>
 
     <string name="error_scanner_cancelled">Code scanner is cancelled.</string>
     <string name="error_camera_permission_not_granted">Camera permission is not granted.</string>
