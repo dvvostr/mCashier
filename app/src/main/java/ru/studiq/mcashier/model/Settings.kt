@@ -27,6 +27,7 @@ public final class Settings {
             private var strUser: String = ""
             private var strDepartment: String = ""
             public val cashbox: String = "КА000218"
+            public var checkStockQty: Boolean = true
             public var currentUser: ProviderDataUser?
             get() {
                 return Gson().fromJson(strUser, ProviderDataUser::class.java)
@@ -176,6 +177,7 @@ public final class Settings {
     public final class Extra {
         companion object {
             val action: String = "EXTRA_ACTION"
+            val actionState: String = "EXTRA_ACTION_STATE"
             val UserObject: String = "EXTRA_USER_OBJECT"
             val CartObject: String = "EXTRA_CART_OBJECT"
             public fun initialize() {

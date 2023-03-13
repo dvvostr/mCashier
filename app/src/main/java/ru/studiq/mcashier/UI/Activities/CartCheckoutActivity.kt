@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.os.PersistableBundle
 import android.view.View
 import android.widget.TextView
+import androidx.annotation.UiThread
 import androidx.appcompat.app.ActionBar
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
@@ -19,10 +20,7 @@ import ru.studiq.mcashier.common.formatDouble
 import ru.studiq.mcashier.model.Settings
 import ru.studiq.mcashier.model.classes.App
 import ru.studiq.mcashier.model.classes.activities.common.CustomCompatActivity
-import ru.studiq.mcashier.model.classes.network.providerclasses.IDataProviderCheckoutDocumentListener
-import ru.studiq.mcashier.model.classes.network.providerclasses.ProviderCheckoutDocument
-import ru.studiq.mcashier.model.classes.network.providerclasses.ProviderCheckoutDocumentHeader
-import ru.studiq.mcashier.model.classes.network.providerclasses.ProviderDataUser
+import ru.studiq.mcashier.model.classes.network.providerclasses.*
 
 class CartCheckoutActivity : CustomCompatActivity() {
     var successParentActivity: String = ""
@@ -75,15 +73,24 @@ class CartCheckoutActivity : CustomCompatActivity() {
         items?.save(this, object : IDataProviderCheckoutDocumentListener {
             override fun onSuccess(sender: Context?, code: Int, msg: String, data: Any?) {
                 super.onSuccess(sender, code, msg, data)
+                val intent = Intent()
+                intent.putExtra(Settings.Extra.action, CartCheckoutActivity.Companion.ACTIVITY_REQUEST_CODE)
+                intent.putExtra(Settings.Extra.actionState, "OK")
+                setResult(RESULT_OK, intent)
                 finish()
+                true
             }
             override fun onEmpty(sender: Context?) {
                 super.onEmpty(sender)
-                Common.AlertDialog.show(activity, getString(R.string.cap_error), getString(R.string.err_data_empty))
+                runOnUiThread {
+                    Common.AlertDialog.show(activity, getString(R.string.cap_error), getString(R.string.err_data_empty))
+                }
             }
             override fun onError(sender: Context?, code: Int, msg: String) {
                 super.onError(sender, code, msg)
-                Common.AlertDialog.show(activity, getString(R.string.cap_error), msg)
+                runOnUiThread {
+                    Common.AlertDialog.show(activity, getString(R.string.cap_error), msg)
+                }
             }
         })
     }

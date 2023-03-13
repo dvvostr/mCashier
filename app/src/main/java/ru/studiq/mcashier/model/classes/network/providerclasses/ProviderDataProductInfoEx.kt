@@ -41,10 +41,17 @@ data class ProviderDataProductInfoExItems (
             i = i.plus(1)
         })
     }
+    public fun clear() {
+        this.items.clear()
+    }
     public fun check(value: ProviderDataProductInfoEx): Boolean {
-        val stockQty = value?.stockQuantity ?: 0.0
-        val saleQty = (items.filter { it.barcode == value.barcode }.map{ it.qty }.sum() + value.qty)
-        return (stockQty > 0.0 && stockQty >= saleQty)
+        if (Settings.Application.checkStockQty) {
+            val stockQty = value?.stockQuantity ?: 0.0
+            val saleQty = (items.filter { it.barcode == value.barcode }.map { it.qty }.sum() + value.qty)
+            return (stockQty > 0.0 && stockQty >= saleQty)
+        } else {
+            return true
+        }
     }
     public val asCheckoutDocument: ProviderCheckoutDocument
     get(){

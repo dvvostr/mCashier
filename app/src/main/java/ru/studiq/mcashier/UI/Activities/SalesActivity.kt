@@ -200,6 +200,10 @@ class SalesActivity : CustomCompatActivity(), SalesActionFragment.SalesItemClick
             initialize()
             sales = Gson().fromJson(data?.getStringExtra(Settings.Extra.CartObject), ProviderDataProductInfoExItems::class.java)
             invalidate()
+        } else if (data?.getStringExtra(Settings.Extra.actionState) == "OK" && requestCode == CartCheckoutActivity.Companion.ACTIVITY_REQUEST_CODE) {
+            sales.clear()
+            initialize()
+            invalidate()
 
         } else {
             // не удалось получить результат

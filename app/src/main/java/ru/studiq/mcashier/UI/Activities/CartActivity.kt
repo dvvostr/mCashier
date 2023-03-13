@@ -96,7 +96,8 @@ class CartActivity : CustomCompatActivity() {
             putExtra(Settings.Activities.FailedActivity, SalesActivity::class.java.name)
             putExtra(Settings.Activities.ListJSON, Gson().toJson(data))
         }
-        startActivity(intent)
+        startActivityForResult(intent, CartCheckoutActivity.ACTIVITY_REQUEST_CODE)
+//        startActivity(intent)
         finish()
     }
 }

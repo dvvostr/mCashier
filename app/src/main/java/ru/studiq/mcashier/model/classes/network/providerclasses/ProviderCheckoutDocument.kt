@@ -105,9 +105,11 @@ data class ProviderCheckoutDocument (
             ICustomListActivityListener {
             override fun onSuccess(sender: Context?, code: Int, msg: String, data: Serializable?) {
                 super.onSuccess(sender, code, msg, data)
-                val json = Gson().toJson((data as? ProviderDataBody)?.data)
-                var items = ProviderDataCurrencyList(Gson().fromJson(Gson().toJson((data as? ProviderDataBody)?.data), object : TypeToken<List<ProviderDataCurrency?>?>() {}.type))
-                listener.onSuccess(sender, code, msg, items)
+//                val json = Gson().toJson((data as? ProviderDataBody)?.data)
+//                var items = ProviderDataCurrencyList(Gson().fromJson(Gson().toJson((data as? ProviderDataBody)?.data), object : TypeToken<List<ProviderDataCurrency?>?>() {}.type))
+//                listener.onSuccess(sender, code, msg, items)
+                val emptyObject: Serializable? = null
+                listener.onSuccess(sender, code, msg, emptyObject)
             }
             override fun onEmpty(sender: Context?) {
                 super.onEmpty(sender)
