@@ -166,6 +166,7 @@ class SalesActivity : CustomCompatActivity(), SalesActionFragment.SalesItemClick
                         putExtra(Settings.Activities.ActivityCaption, getString(R.string.cap_departments))
                         putExtra(Settings.Activities.ListItems, (data as? ProviderDataBody))
                     }
+
                     startActivityForResult(intent, RegisterActivity.DEPARTMENTLIST_ACTIVITY_REQUEST_CODE)
                 } finally {
                     Common.WaitDialog.dismiss()

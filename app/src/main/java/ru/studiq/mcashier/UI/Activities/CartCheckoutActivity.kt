@@ -2,25 +2,17 @@ package ru.studiq.mcashier.UI.Activities
 
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.view.View
 import android.widget.TextView
-import androidx.annotation.UiThread
-import androidx.appcompat.app.ActionBar
-import androidx.navigation.Navigation
-import androidx.navigation.findNavController
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import ru.studiq.mcashier.R
-import ru.studiq.mcashier.UI.Activities.security.RegisterActivity
 import ru.studiq.mcashier.common.Common
 import ru.studiq.mcashier.common.formatDouble
 import ru.studiq.mcashier.model.Settings
-import ru.studiq.mcashier.model.classes.App
 import ru.studiq.mcashier.model.classes.activities.common.CustomCompatActivity
-import ru.studiq.mcashier.model.classes.network.providerclasses.*
+import ru.studiq.mcashier.model.classes.network.providerclasses.IDataProviderCheckoutDocumentListener
+import ru.studiq.mcashier.model.classes.network.providerclasses.ProviderCheckoutDocument
 
 class CartCheckoutActivity : CustomCompatActivity() {
     var successParentActivity: String = ""
@@ -33,7 +25,8 @@ class CartCheckoutActivity : CustomCompatActivity() {
     private var textPaymentType: TextView? = null
 
     companion object {
-        public const val ACTIVITY_REQUEST_CODE = 122
+        const val ACTIVITY_REQUEST_CODE = 122
+        const val SUCCESS_CHECKOUT = "ru.studiq.mcashier.UI.Activities.SUCCESS_CHECKOUT"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,25 +63,31 @@ class CartCheckoutActivity : CustomCompatActivity() {
 
     fun onCheckoutButtonClicked(view: View) {
         val activity = this
+        Common.WaitDialog.show(this, false)
         items?.save(this, object : IDataProviderCheckoutDocumentListener {
             override fun onSuccess(sender: Context?, code: Int, msg: String, data: Any?) {
                 super.onSuccess(sender, code, msg, data)
-                val intent = Intent()
-                intent.putExtra(Settings.Extra.action, CartCheckoutActivity.Companion.ACTIVITY_REQUEST_CODE)
-                intent.putExtra(Settings.Extra.actionState, "OK")
-                setResult(RESULT_OK, intent)
-                finish()
-                true
+                runOnUiThread {
+                    Common.WaitDialog.dismiss()
+                    val intent = Intent()
+                    intent.putExtra(Settings.Extra.action, CartCheckoutActivity.Companion.ACTIVITY_REQUEST_CODE)
+                    intent.putExtra(Settings.Extra.actionState, "OK")
+                    setResult(RESULT_OK, intent)
+                    finish()
+                    true
+                }
             }
             override fun onEmpty(sender: Context?) {
                 super.onEmpty(sender)
                 runOnUiThread {
+                    Common.WaitDialog.dismiss()
                     Common.AlertDialog.show(activity, getString(R.string.cap_error), getString(R.string.err_data_empty))
                 }
             }
             override fun onError(sender: Context?, code: Int, msg: String) {
                 super.onError(sender, code, msg)
                 runOnUiThread {
+                    Common.WaitDialog.dismiss()
                     Common.AlertDialog.show(activity, getString(R.string.cap_error), msg)
                 }
             }

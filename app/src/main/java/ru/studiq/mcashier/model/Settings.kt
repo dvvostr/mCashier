@@ -27,7 +27,7 @@ public final class Settings {
             private var strUser: String = ""
             private var strDepartment: String = ""
             public val cashbox: String = "КА000218"
-            public var checkStockQty: Boolean = true
+            public var checkStockQty: Boolean = false
             public var currentUser: ProviderDataUser?
             get() {
                 return Gson().fromJson(strUser, ProviderDataUser::class.java)
